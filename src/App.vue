@@ -1,0 +1,142 @@
+<template>
+  <section class="rootDiv">
+    <section id="header" class="addShadow">
+      <div>
+        <router-link tag="img" to="/" class="logo" :src="pineapple"/>
+      </div>
+      <div>
+        <ul class="navUl clearfloat">
+          <router-link :to="it.url" v-for="(it,index) in navs" :key="index" tag="li">
+            {{it.name}}
+          </router-link>
+        </ul>
+        <!--<el-menu :default-active="activeIndex" router class="el-menu-demo" mode="horizontal" >-->
+          <!--<el-menu-item index="Login">beginning</el-menu-item>-->
+          <!--<el-menu-item index="Market">Market</el-menu-item>-->
+        <!--</el-menu>-->
+      </div>
+      <div class="mineInfo" >
+        <router-link class="minetitle" tag="span" to="/UserDetail" >
+          我的
+        </router-link>
+      </div>
+    </section>
+    <div id="app">
+      <router-view />
+    </div>
+    <section class="footer">
+      <span>使用条款</span>
+      <span>隐私策略</span>
+    </section>
+  </section>
+</template>
+
+<script>
+import pineapple from './assets/icon/pineapple.png'
+
+export default {
+  name: 'App',
+  data () {
+    return {
+      activeIndex: -1,
+      navs: [{ name: 'beginning', url: 'Login' },
+        {name: 'Market', url: 'Market'}],
+      pineapple
+    }
+  },
+  methods: {
+    clickNav (url) {
+      this.$router.push(url)
+    }
+  },
+  created () {
+    console.log('1111')
+  }
+}
+</script>
+
+<style>
+  @import "assets/font/iconfont.css";
+  @import "assets/css/reset.css";
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    height: 90%;
+    margin-top: 48px;
+  }
+  .clearfloat:after{
+    display:block;
+    clear:both;content:"";
+    visibility:hidden;
+    height:0
+  }
+  .rootDiv{
+    background: #fff;
+  }
+  #header{
+    display: flex;
+    flex-direction: row;
+    line-height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    z-index: 99997;
+    background: #fff;
+  }
+  #header .logo{
+    margin-left: 3.2rem;
+    height: 40px;
+    cursor: pointer;
+  }
+  #header>div{
+    flex: 1;
+    height: 48px;
+    line-height: 48px;
+  }
+  #header>div:nth-child(2){
+    text-align: center;
+  }
+  .addShadow{
+    box-shadow: 0 0 4px rgba(0,0,0,.2);
+  }
+  .navUl{
+    display: inline-block;
+  }
+  .navUl>li{
+    float: left;
+    width: 100px;
+    text-align: center;
+    color: #444;
+    height: 48px;
+    line-height: 48px;
+    cursor: pointer;
+  }
+  .navUl>.router-link-active{
+    color: #30C03F;
+    border-bottom: 2px solid #30C03F;
+  }
+  .mineInfo{
+    text-align: right;
+  }
+  .mineInfo>.minetitle{
+    float: right;
+    margin-right: 3.2rem;
+    cursor: pointer;
+  }
+  .footer{
+    color: #444;
+    height: 48px;
+    line-height: 48px;
+    text-align: center;
+  }
+  .footer>span{
+    cursor: pointer;
+  }
+  .footer>span:first-child{
+    margin-right: 20px;
+  }
+</style>
