@@ -28,25 +28,24 @@
     </section>
     <section style="display: none;"></section>
     <section class="marketcontent">
-      <div v-for="(it,index) in dataList"
-           :style="{visibility: it.hidden?'hidden':'visible'}"
-           @click="toDetail(index)" :key="index" >
-        <el-card class="box-card cardCls" >
-          <section class="cardBody">
-            <div class="clearfloat">
-              <span class="price">{{it.price}}ETH</span>
-            </div>
-            <div>{{it.content}}</div>
-            <div>
-              <span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>
-              <div v-else-if="it.people.length==1" class="signer">
-                <div>{{p.name}}</div>
-                <div>{{p.info}}</div>
+        <div v-for="(it,index) in dataList" @click="toDetail(index)"
+             :key="index" >
+          <el-card class="box-card cardCls" >
+            <section class="cardBody">
+              <div class="clearfloat">
+                <span class="price">{{it.price}}ETH</span>
               </div>
-            </div>
-          </section>
-        </el-card>
-      </div>
+              <div>{{it.content}}</div>
+              <div>
+                <span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>
+                <div v-else-if="it.people.length==1" class="signer">
+                  <div>{{p.name}}</div>
+                  <div>{{p.info}}</div>
+                </div>
+              </div>
+            </section>
+          </el-card>
+        </div>
     </section>
   </section>
 </template>
@@ -93,7 +92,7 @@ export default {
         {content:'不错，真不错，天生幼稚',price:0.02,
           people:[{name:'柯洁',header:'',info:'明星玩家'}]},
         {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},{hidden:1},{hidden:1},{hidden:1}],
+          people:[{name:'柯洁',header:'',info:'明星玩家'}]}],
       searchContent:''
     }
   },
@@ -154,17 +153,22 @@ export default {
     flex-wrap: wrap;
   }
   .marketcontent>div{
-    flex: 1;
-    min-width: 310px;
-    min-height: 250px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+    margin-right: 50px;
+    margin-bottom: 20px;
   }
+  /*.marketcontent>div{*/
+    /*flex: 1;*/
+    /*min-width: 310px;*/
+    /*min-height: 250px;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*cursor: pointer;*/
+  /*}*/
   .cardCls{
     width: 300px;
     height: 220px;
+    cursor: pointer;
   }
   .cardCls:hover{
     box-shadow: 0 2px 12px 0 rgba(48,192,63, 1);

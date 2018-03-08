@@ -25,12 +25,18 @@
     </section>
     <section></section>
     <section class="cardSec">
-      <div class="cerInfo cardInfo cardBord" >
+      <div class="cerInfo cardBord" >
         <span class="littleTitle">认证信息</span>
         <section>
-          <ul>
-            <li>
-              
+          <ul class="identiCls">
+            <li v-for="it in identification">
+              <div class="circleDiv">
+                <img :src="logo" />
+              </div>
+              <div class="famousPerson">
+                <div>柯洁</div>
+                <div>高级玩家信息</div>
+              </div>
             </li>
           </ul>
         </section>
@@ -40,13 +46,14 @@
 </template>
 
 <script>
-import logo from '../../assets/icon/pineapple.png'
+import logo from '../../assets/icon/timg.jpg'
 export default {
   name: 'signatrueDetail',
   data () {
     return {
       stype: 0,
-      logo
+      logo,
+      identification:[{},{},{},{},{},{},{}]
     }
   },
   created(){
@@ -92,5 +99,47 @@ export default {
   }
   .cerInfo{
     padding: 15px;
+  }
+  .identiCls{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .identiCls>li{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    width: 330px;
+    height: 150px;
+  }
+  .identiCls .famousPerson{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .famousPerson>div:first-child{
+    color: #343434;
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .famousPerson>div:last-child{
+    font-size: 12px;
+    color: #6B6B6B;
+    margin-top: 20px;
+  }
+  .circleDiv{
+    position: relative;
+    top: 20px;
+    margin-right: 15px;
+    display: inline-block;
+    overflow: hidden;
+    height: 115px;
+    width: 115px;
+    border-radius: 50%;
+  }
+  .circleDiv>img{
+    width: 100%;
+    height: auto;
   }
 </style>

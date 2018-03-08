@@ -9,7 +9,6 @@
       <div class="mytitle">我的菠萝们</div>
       <section class="marketcontent">
         <div v-for="(it,index) in dataList"
-             :style="{visibility: it.hidden?'hidden':'visible'}"
              @click="toDetail(index)" :key="index" >
           <el-card class="box-card cardCls">
             <section class="cardBody">
@@ -47,7 +46,7 @@ export default {
         {content:'不错，真不错，天生幼稚',price:0.02,
           people:[{name:'柯洁',header:'',info:'明星玩家'}]},
         {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},{hidden:1},{hidden:1},{hidden:1}]
+          people:[{name:'柯洁',header:'',info:'明星玩家'}]}]
     }
   },
   methods:{
@@ -72,20 +71,25 @@ export default {
     margin-bottom: 1.2rem;
   }
   .marketcontent{
+    margin-left: 3.2rem;
     margin-top: 40px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
   }
   .marketcontent>div{
-    flex: 1;
-    min-width: 310px;
-    min-height: 250px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+    margin-right: 50px;
+    margin-bottom: 20px;
   }
+  /*.marketcontent>div{*/
+    /*flex: 1;*/
+    /*min-width: 310px;*/
+    /*min-height: 250px;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*cursor: pointer;*/
+  /*}*/
   .cardCls{
     width: 300px;
     height: 220px;
