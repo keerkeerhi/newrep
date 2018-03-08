@@ -17,7 +17,7 @@
       </div>
       <div class="mineInfo" >
         <router-link class="minetitle" tag="span" to="/UserDetail" >
-          我的
+          <i class="icon-yonghu iconfont"></i>
         </router-link>
       </div>
     </section>
@@ -33,14 +33,13 @@
 
 <script>
 import pineapple from './assets/icon/pineapple.png'
-
 export default {
   name: 'App',
   data () {
     return {
       activeIndex: -1,
-      navs: [{ name: 'beginning', url: 'Login' },
-        {name: 'Market', url: 'Market'}],
+      navs: [{ name: 'beginning', url: '/Login' },
+        {name: 'Market', url: '/Market'}],
       pineapple
     }
   },
@@ -50,7 +49,6 @@ export default {
     }
   },
   created () {
-    console.log('1111')
   }
 }
 </script>
@@ -59,7 +57,7 @@ export default {
   @import "assets/font/iconfont.css";
   @import "assets/css/reset.css";
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: Sans-serif Helvetica;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
@@ -126,6 +124,9 @@ export default {
     float: right;
     margin-right: 3.2rem;
     cursor: pointer;
+  }
+  .minetitle>.iconfont{
+    font-size: 35px;
   }
   .footer{
     color: #444;
