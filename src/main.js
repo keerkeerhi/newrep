@@ -11,6 +11,8 @@ import Vuex from 'vuex'
 // axios 官方推荐API
 import axios from 'axios'
 
+// import "babel-polyfill"
+
 Vue.config.productionTip = false
 // 光引用不成，还得使用
 Vue.use(Vuex)

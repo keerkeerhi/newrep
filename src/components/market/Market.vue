@@ -51,7 +51,7 @@
 </template>
 <script>
 // import marketService from '../../service/marketsev'
-const cityOptions = ['认证', '个人认证', '团队认证', '联合认证'];
+const cityOptions = ['个人认证', '团队认证', '联合认证'];
 export default {
   name: 'market',
   data () {
@@ -153,7 +153,8 @@ export default {
     flex-wrap: wrap;
   }
   .marketcontent>div{
-    margin-right: 50px;
+    flex-grow:1;
+    /*margin-right: 7px;*/
     margin-bottom: 20px;
   }
   /*.marketcontent>div{*/

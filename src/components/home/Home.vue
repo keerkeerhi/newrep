@@ -70,11 +70,13 @@ export default {
   .homeTem{
     padding: 3.2rem 0 0 0;
     display: flex;
+    display: -webkit-flex;
     flex-direction: column;
   }
   .entrance{
     width: 100%;
     display: flex;
+    display: -webkit-flex;
     flex-direction: row;
   }
   .entrance>section:first-child{
@@ -85,6 +87,7 @@ export default {
     margin-right: 3.2rem;
     flex: 2;
     display: flex;
+    display: -webkit-flex;
     flex-direction: row;
     flex-wrap: wrap;
   }

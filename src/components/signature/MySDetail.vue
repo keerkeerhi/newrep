@@ -30,7 +30,7 @@
         <section>
           <ul class="identiCls">
             <li v-for="it in identification">
-              <div class="circleDiv">
+              <div class="circleDiv pimg">
                 <img :src="logo" />
               </div>
               <div class="famousPerson">
@@ -63,6 +63,8 @@
 </script>
 
 <style scoped>
+  @import '../../assets/css/basestyle.css';
+
   .homeTem{
     padding: 3.2rem 0 0 0;
     display: flex;
@@ -128,18 +130,11 @@
     color: #6B6B6B;
     margin-top: 20px;
   }
-  .circleDiv{
+  .pimg {
     position: relative;
     top: 20px;
     margin-right: 15px;
-    display: inline-block;
-    overflow: hidden;
     height: 115px;
     width: 115px;
-    border-radius: 50%;
-  }
-  .circleDiv>img{
-    width: 100%;
-    height: auto;
   }
 </style>
