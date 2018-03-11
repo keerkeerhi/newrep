@@ -17,7 +17,7 @@
       </div>
       <div class="mineInfo" >
         <router-link class="minetitle" tag="span" to="/UserDetail" >
-          <i class="icon-yonghu iconfont"></i>
+          我的
         </router-link>
       </div>
     </section>
@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import pineapple from './assets/icon/pineapple.png'
+import pineapple from './assets/icon/bolo.png'
+
 export default {
   name: 'App',
   data () {
@@ -53,17 +54,20 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" >
+  @import "assets/css/style";
   @import "assets/font/iconfont.css";
-  @import "assets/css/reset.css";
+  @import "assets/css/sass-base";
+
   #app {
-    font-family: Sans-serif Helvetica;
+    font-family: 微软雅黑;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #2c3e50;
+    color: $base_black;
     height: 90%;
     margin-top: 48px;
   }
+
   .clearfloat:after{
     display:block;
     clear:both;content:"";
@@ -83,10 +87,11 @@ export default {
     right: 0;
     height: 48px;
     z-index: 99997;
-    background: #fff;
+    color: #A7A7A7;
+    background: $base_black;
   }
   #header .logo{
-    margin-left: 3.2rem;
+    margin: 4px 0 0 3.2rem;
     height: 40px;
     cursor: pointer;
   }
@@ -108,20 +113,20 @@ export default {
     float: left;
     width: 100px;
     text-align: center;
-    color: #444;
-    height: 48px;
-    line-height: 48px;
+    height: 46px;
+    line-height: 46px;
     cursor: pointer;
   }
-  .navUl>.router-link-active{
-    color: #30C03F;
-    border-bottom: 2px solid #30C03F;
+  .navUl .router-link-active,.minetitle.router-link-active{
+    color: $base_yellow;
+    border-bottom: 2px solid $base_yellow;
   }
   .mineInfo{
     text-align: right;
   }
   .mineInfo>.minetitle{
     float: right;
+    height: 46px;
     margin-right: 3.2rem;
     cursor: pointer;
   }

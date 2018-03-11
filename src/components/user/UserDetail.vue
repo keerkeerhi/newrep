@@ -7,19 +7,20 @@
         </div>
         <div class="infoDetail">
           <div>
-            <span class="pname">周杰伦</span> <i class="icon-bianji iconfont" />
+            <span class="pname">周杰伦</span>
+            <!--<i class="icon-bianji iconfont" />-->
           </div>
           <div class="infoCeri gray-font">
-            <i class="iconfont icon-anquanrenzheng" /><span>未认证</span>
+            <!--<i class="iconfont icon-anquanrenzheng" />-->
+            <span>围棋五段</span>
           </div>
-          <div class="infoTeam gray-font">
-            <i class="iconfont icon-kulian" /><span>尚未加入团队</span>
-          </div>
+          <!--<div class="infoTeam gray-font">-->
+            <!--<i class="iconfont icon-kulian" /><span>尚未加入团队</span>-->
+          <!--</div>-->
         </div>
       </section>
-      <section></section>
       <section>
-        <el-button type="primary" round icon="el-icon-share">
+        <el-button class="inviteBtn" type="primary" icon="el-icon-share">
           邀请好友奖励
         </el-button>
       </section>
@@ -27,23 +28,32 @@
     <section>
       <div class="mytitle">我的菠萝们</div>
       <section class="marketcontent">
-        <div v-for="(it,index) in dataList"
-             @click="toDetail(index)" :key="index" >
-          <el-card class="box-card cardCls">
-            <section class="cardBody">
-              <div class="clearfloat">
-                <span class="price">{{it.price}}ETH</span>
-              </div>
-              <div>{{it.content}}</div>
-              <div>
-                <span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>
-                <div v-else-if="it.people.length==1" class="signer">
-                  <div>{{p.name}}</div>
-                  <div>{{p.info}}</div>
+        <div v-for="(it,index) in dataList" :key="index" >
+          <div @click="toDetail(index)" style="display: inline-block;">
+            <el-card class="box-card cardCls">
+              <section class="cardBody">
+                <div>
+                  <img style="width: 100%;" :src="bolo" />
                 </div>
-              </div>
-            </section>
-          </el-card>
+                <div class="ownerCls">
+                  <span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>
+                  <div v-else-if="it.people.length==1" class="signer">
+                    <div style="width: 60px;" class="circleDiv">
+                      <img :src="logo"/>
+                    </div>
+                    <div>
+                      <div>{{p.name}}</div>
+                      <div v-if="p.info">{{p.info}}</div>
+                    </div>
+                    <div></div>
+                    <div class="priceDiv">
+                      <span class="price">{{it.price}}ETH</span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </el-card>
+          </div>
         </div>
       </section>
     </section>
@@ -52,10 +62,12 @@
 
 <script>
 import logo from '../../assets/icon/timg.jpg'
+import bolo from '../../assets/icon/img.png'
 export default {
   name: 'userDetail',
   data () {
     return {
+      bolo,
       dataList:[
         {content:'不错，真不错，天生幼稚',price:0.02,
           people:[{name:'柯洁',header:'',info:'明星玩家'}]},
@@ -81,8 +93,10 @@ export default {
 }
 </script>
 
-<style scoped>
-  @import '../../assets/css/basestyle.css';
+<style lang="scss" scoped>
+
+  @import "../../assets/css/basestyle.css";
+  @import "../../assets/css/sass-base";
 
   .homeTem{
     padding: 1.2rem 0 0 0;
@@ -91,35 +105,41 @@ export default {
   }
   .invateFriend{
     padding: 0 6rem;
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 1.2rem;
+    display:flex;/*Flex布局*/
+    display: -webkit-flex; /* Safari */
+    flex-direction: column;
+    align-items:center;/*指定垂直居中*/
+    /*justify-content: center;*/
+    /*margin-bottom: 1.2rem;*/
   }
   .invateFriend .circleDiv{
-    height: 115px;
-    width: 115px;
-  }
-  .invateFriend>section:nth-child(2){
-    flex: 1;
+    height: 90px;
+    width: 90px;
   }
   .invateFriend>section:last-child{
-    line-height: 115px;
-    margin-right: 50px;
+    line-height: 52px;
+    .inviteBtn{
+      color: $base_black;
+      border-radius: 0px;
+    }
+    /*margin-right: 50px;*/
   }
   .personInfo{
     display: flex;
-    flex-direction: row;
-  }
-  .personInfo>.circleDiv{
-    margin-right: 40px;
+    display: -webkit-flex; /* Safari */
+    flex-direction: column;
+    align-items:center;/*指定垂直居中*/
+    justify-content: center;
   }
   .infoDetail{
+    margin-top: 15px;
     display: flex;
     flex-direction: column;
+    align-items:center;
     justify-content: center;
   }
   .infoDetail>div:first-child{
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   .infoDetail .pname{
     font-weight: 700;
@@ -158,44 +178,70 @@ export default {
     /*margin-right: 7px;*/
     margin-bottom: 20px;
   }
-  /*.marketcontent>div{*/
-    /*flex: 1;*/
-    /*min-width: 310px;*/
-    /*min-height: 250px;*/
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
-    /*cursor: pointer;*/
-  /*}*/
-  .cardCls{
-    width: 300px;
-    height: 220px;
+  .cardCls {
+    width: 330px;
+    height: 280px;
     cursor: pointer;
-  }
-  .cardCls:hover{
-    box-shadow: 0 2px 12px 0 rgba(48,192,63, 1);
-  }
-  .cardBody{
-    height: 180px;
-    display: flex;
-    flex-direction: column;
-  }
-  .cardBody :nth-child(2)
-  {
-    flex: 1;
-  }
-  .cardBody .price{
-    float: right;
-    border: 1px solid #30C03F;
-    border-radius: 10px;
-    padding: 5px;
-    font-size: 12px;
+    >.el-card__body{
+      padding: 15px 15px 20px 15px;
+    }
+    &:hover {
+      box-shadow: 0 2px 12px 0 $base_yellow;
+    }
+    .cardBody {
+      height: 240px;
+      display: flex;
+      flex-direction: column;
+      >:nth-child(1) {
+        flex: 1;
+      }
+      > .ownerCls {
+        > .signer {
+          margin-top: 5px;
+          height: 64px;
+          display: flex;
+          .circleDiv {
+            height: 60px;
+            width: 60px;
+            background: $base_black;
+            margin-right: 20px;
+          }
+          >div:nth-child(2)
+          {
+            display:flex;/*Flex布局*/
+            flex-direction: column;
+            display: -webkit-flex; /* Safari */
+            /*align-items:center;!*指定垂直居中*!*/
+            justify-content: center;
+            line-height: 25px;
+            >div:first-child{
+              font-weight: bold;
+            }
+            >div:nth-child(2){
+              font-size: 14px;
+              color: $base_gray;
+            }
+          }
+          >div:nth-child(3)
+          {
+            flex: 1;
+          }
+        }
+      }
+      .priceDiv{
+        line-height: 64px;
+        .price {
+          border: 1px solid $base_black;
+          padding: 3px 15px;
+          font-size: 12px;
+        }
+      }
+    }
   }
   .mytitle{
     font-size: 16px;
     font-weight: bold;
     letter-spacing: 2px;
-    margin-top: 20px;
     padding: 0 0 10px 20px;
     border-bottom: 1px solid #ccc;
   }

@@ -11,7 +11,7 @@
       <p>
         您将需要一个安全的地方来储存您可爱的谜恋猫！像MetaMask这样的安全钱包即是完美之地。同时您也可以通过钱包进入游戏（无需另设密码）。
       </p>
-      <el-button @click="installMeta" type="success" round>安装MetaMask</el-button>
+      <el-button class="installBtn" type="primary" @click="installMeta" >安装MetaMask</el-button>
     </section>
   </section>
 </template>
@@ -39,7 +39,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import "../../assets/css/sass-base";
   .homeTem{
     padding: 3.2rem 0 0 0;
     display: flex;
@@ -66,6 +67,8 @@ export default {
   }
   .installCls :nth-child(3)
   {
+    color: $base_black;
+    border-radius: 0px;
     margin-bottom: 150px;
   }
   .installCls2{

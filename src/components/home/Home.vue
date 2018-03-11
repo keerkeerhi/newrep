@@ -2,14 +2,14 @@
   <div class="homeTem">
     <section class="entrance">
       <section class="abstract">
-        <h2>welcome to polo</h2>
+        <h2>Welcome to Bolo</h2>
         <p>
           some info some info some info some info
           some info some info
           some info some info
           some info some info
         </p>
-        <el-button class="startPlay" type="success" @click="toPlay" round>START PLAY</el-button>
+        <el-button class="startPlay" type="primary" @click="toPlay" >现在加入</el-button>
       </section>
       <div>
         <div class="addShadow" v-for="(it,index) in [0,1,2,3,4,5,6,5,7]" :key="index">
@@ -19,7 +19,7 @@
     </section>
     <section class="description">
       <h2>
-        How to Play!
+        如何拥有自己的菠萝？
       </h2>
       <p>
         some info some info some info some info
@@ -43,7 +43,7 @@
 
 <script>
 import homeicon from '../../assets/icon/mattjohn-homepage.png'
-import polo from '../../assets/icon/pineapple.png'
+import polo from '../../assets/icon/img.png'
 
 export default {
   name: 'home',
@@ -66,7 +66,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import '../../assets/css/sass-base';
+
   .homeTem{
     padding: 3.2rem 0 0 0;
     display: flex;
@@ -92,9 +94,11 @@ export default {
     flex-wrap: wrap;
   }
   .entrance>div:nth-child(2)>div{
+    width: 273px;
+    height: 170px;
+    padding: 10px;
     margin: 7px;
     border: 1px solid #fff;
-    width: 180px;
     cursor: pointer;
   }
   .entrance>div:nth-child(2)>div:hover{
@@ -105,12 +109,13 @@ export default {
     max-width: 100%;
   }
   .abstract{
+    text-align: center;
     margin-right: 18px;
   }
   .abstract>h2{
     margin-top: 100px;
     font-size: 36px;
-    font-weight: 700;
+    font-weight: 500;
   }
   .abstract>p{
     margin-top: 20px;
@@ -122,20 +127,24 @@ export default {
     line-height: 1.7em
   }
   .startPlay{
+    width: 200px;
+    color: $base_black;
+    font-weight: 600;
+    border-radius: 1px;
     margin-top: 40px;
   }
   .description{
-    color: #fff;
-    margin-top: 20px;
-    background: #30C03F;;
-    height: 500px;
+    color: $base_yellow;
+    margin: 20px 0;
+    background: $base_black;;
+    /*height: 500px;*/
     /*text-align: center;*/
   }
   .description>h2{
     text-align: center;
-    margin-top: 100px;
-    font-size: 36px;
-    font-weight: 700;
+    margin-top: 40px;
+    font-size: 18px;
+    font-weight: 500;
   }
   .description>p{
     margin: 20px;

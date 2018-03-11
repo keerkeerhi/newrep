@@ -4,7 +4,7 @@
       <input type="text" v-model="searchContent" name="input" class="input">
       <button type="reset" class="search" @click="searchHandle"></button>
     </div>
-    <section>
+    <section class="navCls">
       <el-tabs v-model="activeIndex" @tab-click="handleClick">
         <el-tab-pane :key="index" v-for="(it,index) in navs" :label="it.name"
                      :name="index+''"></el-tab-pane>
@@ -28,187 +28,258 @@
     </section>
     <section style="display: none;"></section>
     <section class="marketcontent">
-        <div v-for="(it,index) in dataList" @click="toDetail(index)"
-             :key="index" >
-          <el-card class="box-card cardCls" >
+      <div v-for="(it,index) in dataList"
+           :key="index">
+        <div @click="toDetail(index)" style="display: inline-block;">
+          <el-card class="box-card cardCls">
             <section class="cardBody">
-              <div class="clearfloat">
-                <span class="price">{{it.price}}ETH</span>
-              </div>
               <div>{{it.content}}</div>
-              <div>
+              <div class="ownerCls">
                 <span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>
                 <div v-else-if="it.people.length==1" class="signer">
-                  <div>{{p.name}}</div>
-                  <div>{{p.info}}</div>
+                  <div style="width: 60px;" class="circleDiv">
+                    <img :src="boloimg"/>
+                  </div>
+                  <div>
+                    <div>{{p.name}}</div>
+                    <div v-if="p.info">{{p.info}}</div>
+                  </div>
+                  <div></div>
+                  <div class="priceDiv">
+                    <span class="price">{{it.price}}ETH</span>
+                  </div>
                 </div>
               </div>
             </section>
           </el-card>
         </div>
+      </div>
     </section>
   </section>
 </template>
 <script>
-// import marketService from '../../service/marketsev'
-const cityOptions = ['个人认证', '团队认证', '联合认证'];
-export default {
-  name: 'market',
-  data () {
-    return {
-      activeIndex: 0,
-      navs: [
-        {name: '热门菠萝', par: {flag: 1}},
-        {name: '最新菠萝', par: {flag: 2}},
-        {name: '名人菠萝', par: {flag: 3}},
-        {name: '所有菠萝', par: {flag: 4}}
-      ],
-      params: {
-
-      },
-      checkedCities1: [],
-      cities: cityOptions,
-      options: [{
-        value: '选项1',
-        label: '价格从高到低'
-      }, {
-        value: '选项2',
-        label: '价格从低到高'
-      }, {
-        value: '选项3',
-        label: '转手次数从多到少'
-      }, {
-        value: '选项4',
-        label: '转手次数从少到多'
-      }],
-      sortValue: '',
-      dataList:[
-        {content:'不错，真不错，天生幼稚',price:0.02,
-        people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]}],
-      searchContent:''
-    }
-  },
-  created(){
-    console.log('in......')
-  },
-  methods: {
-    handleClick (par) {
-      console.log('------------par', this.activeIndex)
-      // marketService.getList(Object.assign(this.params, par)).then(res => {
-      //
-      // })
-    },
-    searchHandle () {
-      console.log('--------->', $)
-      this.searchContent = '';
-      $('#searchContent>.search').toggleClass('close')
-      $('#searchContent>.input').toggleClass('square')
-      if ($('#searchContent>.search').hasClass('close')) {
-        $('#searchContent>input').focus()
-      } else {
-        $('#searchContent>input').blur()
+  // import marketService from '../../service/marketsev'
+  import boloimg from '../../assets/icon/bolo.png';
+  const cityOptions = ['个人认证', '团队认证', '联合认证'];
+  export default {
+    name: 'market',
+    data () {
+      return {
+        boloimg,
+        activeIndex: 0,
+        navs: [
+          {name: '热门', par: {flag: 1}},
+          {name: '最新', par: {flag: 2}},
+          {name: '名人', par: {flag: 3}},
+          {name: '所有', par: {flag: 4}}
+        ],
+        params: {},
+        checkedCities1: [],
+        cities: cityOptions,
+        options: [{
+          value: '选项1',
+          label: '价格从高到低'
+        }, {
+          value: '选项2',
+          label: '价格从低到高'
+        }, {
+          value: '选项3',
+          label: '转手次数从多到少'
+        }, {
+          value: '选项4',
+          label: '转手次数从少到多'
+        }],
+        sortValue: '',
+        dataList: [
+          {
+            content: '不错，真不错，天生幼稚', price: 0.02,
+            people: [{name: '柯洁', header: '', info: ''}]
+          },
+          {
+            content: '不错，真不错，天生幼稚', price: 0.02,
+            people: [{name: '柯洁', header: '', info: '明星玩家'}]
+          },
+          {
+            content: '不错，真不错，天生幼稚', price: 0.02,
+            people: [{name: '柯洁', header: '', info: '明星玩家'}]
+          },
+          {
+            content: '不错，真不错，天生幼稚', price: 0.02,
+            people: [{name: '柯洁', header: '', info: '明星玩家'}]
+          },
+          {
+            content: '不错，真不错，天生幼稚', price: 0.02,
+            people: [{name: '柯洁', header: '', info: '明星玩家'}]
+          }],
+        searchContent: ''
       }
     },
-    toDetail (id) {
-      console.log('------->>click',id)
-      this.$router.push({
-        name: 'SignatureDetail',
-        params: { id }})
+    created(){
+      console.log('in......')
+    },
+    methods: {
+      handleClick (par) {
+        console.log('------------par', this.activeIndex)
+        // marketService.getList(Object.assign(this.params, par)).then(res => {
+        //
+        // })
+      },
+      searchHandle () {
+        console.log('--------->', $)
+        this.searchContent = '';
+        $('#searchContent>.search').toggleClass('close')
+        $('#searchContent>.input').toggleClass('square')
+        if ($('#searchContent>.search').hasClass('close')) {
+          $('#searchContent>input').focus()
+        } else {
+          $('#searchContent>input').blur()
+        }
+      },
+      toDetail (id) {
+        console.log('------->>click', id)
+        this.$router.push({
+          name: 'SignatureDetail',
+          params: {id}
+        })
+      }
     }
   }
-}
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   @import '../../assets/css/basestyle.css';
+  @import '../../assets/css/sass-base';
 
-  .homeTem{
+  .homeTem {
     padding: 3.2rem 0 0 0;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow-x: hidden;
   }
-  .homeTem:first-child{
-    margin: 0 3.2rem;
+
+  .homeTem:first-child {
+    margin: 0 1.8rem;
   }
-  .clearfloat:after{
-    display:block;
-    clear:both;content:"";
-    visibility:hidden;
-    height:0
+
+  .clearfloat:after {
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0
   }
-  .marketcontent{
+
+  .marketcontent {
     margin-top: 40px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
   }
-  .marketcontent>div{
-    flex-grow:1;
+
+  .marketcontent > div {
+    flex-grow: 1;
     /*margin-right: 7px;*/
     margin-bottom: 20px;
   }
+
   /*.marketcontent>div{*/
-    /*flex: 1;*/
-    /*min-width: 310px;*/
-    /*min-height: 250px;*/
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
-    /*cursor: pointer;*/
+  /*flex: 1;*/
+  /*min-width: 310px;*/
+  /*min-height: 250px;*/
+  /*display: flex;*/
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  /*cursor: pointer;*/
   /*}*/
-  .cardCls{
-    width: 300px;
-    height: 220px;
+  .cardCls {
+    width: 330px;
+    height: 280px;
     cursor: pointer;
+    >.el-card__body{
+      padding: 15px 15px 20px 15px;
+    }
+    &:hover {
+      box-shadow: 0 2px 12px 0 $base_yellow;
+    }
+    .cardBody {
+      height: 240px;
+      display: flex;
+      flex-direction: column;
+      >:nth-child(1) {
+        flex: 1;
+      }
+      > .ownerCls {
+        > .signer {
+          margin-top: 5px;
+          height: 64px;
+          display: flex;
+          .circleDiv {
+            height: 60px;
+            width: 60px;
+            background: $base_black;
+            margin-right: 20px;
+          }
+          >div:nth-child(2)
+          {
+            display:flex;/*Flex布局*/
+            flex-direction: column;
+            display: -webkit-flex; /* Safari */
+            /*align-items:center;!*指定垂直居中*!*/
+            justify-content: center;
+            line-height: 25px;
+            >div:first-child{
+              font-weight: bold;
+            }
+            >div:nth-child(2){
+              font-size: 14px;
+              color: $base_gray;
+            }
+          }
+          >div:nth-child(3)
+          {
+            flex: 1;
+          }
+        }
+      }
+      .priceDiv{
+        line-height: 64px;
+        .price {
+          border: 1px solid $base_black;
+          padding: 3px 15px;
+          font-size: 12px;
+        }
+      }
+    }
   }
-  .cardCls:hover{
-    box-shadow: 0 2px 12px 0 rgba(48,192,63, 1);
-  }
-  .cardBody{
-    height: 180px;
-    display: flex;
-    flex-direction: column;
-  }
-  .cardBody :nth-child(2)
-  {
-    flex: 1;
-  }
-  .cardBody .price{
-    float: right;
-    border: 1px solid #30C03F;
-    border-radius: 10px;
-    padding: 5px;
-    font-size: 12px;
-  }
-  .sbanner{
+
+  .sbanner {
     display: flex;
     flex-direction: row;
     align-items: end;
   }
-  .sbanner :first-child{
+
+  .sbanner :first-child {
     flex: 1;
   }
-  .sbanner :nth-child(2){
+
+  .sbanner :nth-child(2) {
     flex: 1;
     text-align: right;
   }
-  .signListCls{
+
+  .navCls .el-tabs__item {
+    color: #585858;
+  }
+
+  .el-tabs__item.is-active {
+    color: $base_black;
+  }
+
+  .signListCls {
 
   }
-  .signer>div:nth-child(2){
-    color:#708090;font-size: 8px;
-    margin-top: 10px;
-  }
+
   /*-------------------------------------搜索框开始-------------------------------*/
   #searchContent {
     position: absolute;
@@ -220,11 +291,11 @@ export default {
     /*transform: translate(-50%, -50%);*/
   }
 
-  #searchContent>input {
+  #searchContent > input {
     box-sizing: border-box;
     width: 50px;
     height: 50px;
-    border: 4px solid #30C03F;
+    border: 4px solid $base_black;
     border-radius: 50%;
     background: none;
     color: #343434;
@@ -241,7 +312,7 @@ export default {
     transform: translate(-100%, -50%);
   }
 
-  #searchContent>.search {
+  #searchContent > .search {
     background: none;
     position: absolute;
     top: 0px;
@@ -261,7 +332,7 @@ export default {
     transform: translate(-100%, -50%);
   }
 
-  #searchContent>.search:before {
+  #searchContent > .search:before {
     content: "";
     position: absolute;
     width: 20px;
@@ -276,14 +347,14 @@ export default {
     transition: 0.2s ease-in-out;
   }
 
-  #searchContent>.close {
+  #searchContent > .close {
     -webkit-transition: 0.4s ease-in-out;
     transition: 0.4s ease-in-out;
     -webkit-transition-delay: 0.4s;
     transition-delay: 0.4s;
   }
 
-  #searchContent>.close:before {
+  #searchContent > .close:before {
     content: "";
     position: absolute;
     width: 27px;
@@ -298,12 +369,12 @@ export default {
     transition: 0.2s ease-in-out;
   }
 
-  #searchContent>.close:after {
+  #searchContent > .close:after {
     content: "";
     position: absolute;
     width: 27px;
     height: 4px;
-    background-color: #30C03F;
+    background-color: $base_black;
     margin-top: -1px;
     margin-left: -13px;
     cursor: pointer;
@@ -312,12 +383,12 @@ export default {
     transform: rotate(-45deg);
   }
 
-  #searchContent>.square {
+  #searchContent > .square {
     box-sizing: border-box;
     padding: 0 40px 0 10px;
     width: 300px;
     height: 50px;
-    border: 4px solid #30C03F;
+    border: 4px solid $base_black;
     border-radius: 20px;
     background: none;
     color: #343434;
@@ -333,5 +404,6 @@ export default {
     -ms-transform: translate(-100%, -50%);
     transform: translate(-100%, -50%);
   }
+
   /*-------------------------------------搜索框结束-------------------------------*/
 </style>

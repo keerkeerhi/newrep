@@ -1,10 +1,10 @@
 <template>
   <section class="homeTem">
     <div class="backCls">
-      <router-link class="backClsBlob" to="/Market" tag="section">
+      <section class="backClsBlob" @click="goPrev()">
         <i class="icon-icon- iconfont" />
         <span>返回</span>
-      </router-link>
+      </section>
       <!--<section class="backClsBlob">-->
       <!--</section>-->
       <section></section>
@@ -113,6 +113,11 @@
       };
       chartBody.setOption(option)
       console.log('--------------菠萝详情')
+    },
+    methods: {
+      goPrev(){
+        window.history.go(-1);
+      }
     }
   }
 </script>
