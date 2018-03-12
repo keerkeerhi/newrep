@@ -110,6 +110,10 @@
           {
             content: '不错，真不错，天生幼稚', price: 0.02,
             people: [{name: '柯洁', header: '', info: '明星玩家'}]
+          },
+          {
+            content: '不错，真不错，天生幼稚', price: 0.02,
+            people: [{name: '柯洁', header: '', info: '明星玩家'}]
           }],
         searchContent: ''
       }
@@ -147,7 +151,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/css/basestyle.css';
+  @import '../../assets/css/basestyle';
   @import '../../assets/css/sass-base';
 
   .homeTem {
@@ -179,6 +183,7 @@
 
   .marketcontent > div {
     flex-grow: 1;
+    max-width: 363px;
     /*margin-right: 7px;*/
     margin-bottom: 20px;
   }

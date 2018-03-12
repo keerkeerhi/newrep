@@ -15,6 +15,8 @@ const Market = r => require.ensure([], () => r(require('../components/market/Mar
 const SignatureDetail = r => require.ensure([], () => r(require('../components/signature/SignatureDetail')), 'SignatureDetail')
 // 用户详情
 const UserDetail = r => require.ensure([], () => r(require('../components/user/UserDetail')), 'UserDetail')
+// 其他用户详情
+const OtherDetail = r => require.ensure([], () => r(require('../components/user/OtherDetail')), 'OtherDetail')
 // 用户注册页
 const Register = r => require.ensure([], () => r(require('../components/register/Register')), 'Register')
 // 我的菠萝详情
@@ -24,6 +26,10 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: '/Home'
+    },
+    {
+      path: '/Home',
       name: 'Home',
       component: Home
     },
@@ -46,6 +52,11 @@ export default new Router({
       path: '/UserDetail',
       name: 'UserDetail',
       component: UserDetail
+    },
+    {
+      path: '/OtherDetail/:id',
+      name: 'OtherDetail',
+      component: OtherDetail
     },
     {
       path: '/Register',

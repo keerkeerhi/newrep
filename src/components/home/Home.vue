@@ -12,7 +12,7 @@
         <el-button class="startPlay" type="primary" @click="toPlay" >现在加入</el-button>
       </section>
       <div>
-        <div class="addShadow" v-for="(it,index) in [0,1,2,3,4,5,6,5,7]" :key="index">
+        <div class="global_shadow addShadow" v-for="(it,index) in [0,1,2,3,4,5,6,5,7]" :key="index">
           <img class="signatureimg" :src="polo" @click="toDetail(it)" />
         </div>
       </div>
@@ -102,8 +102,7 @@ export default {
     cursor: pointer;
   }
   .entrance>div:nth-child(2)>div:hover{
-    border: 1px solid rgba(48,192,63,.8);
-    box-shadow: 0 0 4px rgba(48,192,63,.2);
+    border: 1px solid rgba(255,224,0,.8);
   }
   .signatureimg{
     max-width: 100%;

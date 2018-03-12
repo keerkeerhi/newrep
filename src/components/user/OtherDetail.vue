@@ -7,7 +7,7 @@
         </div>
         <div class="infoDetail">
           <div>
-            <span class="pname">周杰伦</span>
+            <span class="pname">柯杰</span>
             <!--<i class="icon-bianji iconfont" />-->
           </div>
           <div class="infoCeri gray-font">
@@ -15,18 +15,23 @@
             <span>围棋五段</span>
           </div>
           <!--<div class="infoTeam gray-font">-->
-            <!--<i class="iconfont icon-kulian" /><span>尚未加入团队</span>-->
+          <!--<i class="iconfont icon-kulian" /><span>尚未加入团队</span>-->
           <!--</div>-->
         </div>
       </section>
       <section>
         <el-button class="inviteBtn" type="primary" icon="el-icon-share">
-          邀请好友
+          邀请好友获取奖励
         </el-button>
       </section>
     </section>
     <section>
-      <div class="mytitle">我的菠萝们</div>
+      <section class="navCls">
+        <el-tabs v-model="activeIndex" @tab-click="handleClick">
+          <el-tab-pane :key="index" v-for="(it,index) in navs" :label="it.name"
+                       :name="index+''"></el-tab-pane>
+        </el-tabs>
+      </section>
       <section class="marketcontent">
         <div v-for="(it,index) in dataList" :key="index" >
           <div @click="toDetail(index)" style="display: inline-block;">
@@ -61,36 +66,49 @@
 </template>
 
 <script>
-import logo from '../../assets/icon/timg.jpg'
-import bolo from '../../assets/icon/img.png'
-export default {
-  name: 'userDetail',
-  data () {
-    return {
-      bolo,
-      dataList:[
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-        {content:'不错，真不错，天生幼稚',price:0.02,
-          people:[{name:'柯洁',header:'',info:'明星玩家'}]}],
-      logo
-    }
-  },
-  methods:{
-    toDetail (id) {
-      console.log('------->>click',id)
-      this.$router.push({
-        name: 'MySDetail',
-        params: { id }})
+  import logo from '../../assets/icon/timg.jpg'
+  import bolo from '../../assets/icon/img.png'
+  export default {
+    name: 'OtherDetail',
+    data () {
+      return {
+        bolo,
+        activeIndex: 0,
+        navs: [
+          {name: '粉丝专属章', par: {flag: 1}},
+          {name: '他拥有的章', par: {flag: 2}},
+          {name: '他发起的菠萝', par: {flag: 3}},
+          {name: '他认证的菠萝', par: {flag: 4}}
+        ],
+        dataList:[
+          {content:'不错，真不错，天生幼稚',price:0.02,
+            people:[{name:'柯洁',header:'',info:'明星玩家'}]},
+          {content:'不错，真不错，天生幼稚',price:0.02,
+            people:[{name:'柯洁',header:'',info:'明星玩家'}]},
+          {content:'不错，真不错，天生幼稚',price:0.02,
+            people:[{name:'柯洁',header:'',info:'明星玩家'}]},
+          {content:'不错，真不错，天生幼稚',price:0.02,
+            people:[{name:'柯洁',header:'',info:'明星玩家'}]},
+          {content:'不错，真不错，天生幼稚',price:0.02,
+            people:[{name:'柯洁',header:'',info:'明星玩家'}]}],
+        logo
+      }
+    },
+    methods:{
+      toDetail (id) {
+        console.log('------->>click',id)
+        this.$router.push({
+          name: 'MySDetail',
+          params: { id }})
+      },
+      handleClick (par) {
+        console.log('------------par', this.activeIndex)
+        // marketService.getList(Object.assign(this.params, par)).then(res => {
+        //
+        // })
+      },
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
@@ -244,5 +262,15 @@ export default {
     letter-spacing: 2px;
     padding: 0 0 10px 20px;
     border-bottom: 1px solid #ccc;
+  }
+  .navCls{
+    margin: 38px;
+  }
+  .navCls .el-tabs__item {
+    color: #585858;
+  }
+
+  .el-tabs__item.is-active {
+    color: $base_black;
   }
 </style>

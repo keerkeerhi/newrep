@@ -9,37 +9,32 @@
       <!--</section>-->
       <section></section>
     </div>
-    <section class="cardSec">
-      <div class="cardContent cardBord flexCenter">
-        <span>不错，真不错，天生幼稚</span>
-      </div>
-    </section>
-    <section class="cardSec">
-      <div class="cardInfo cardPadd cardBord">
-        <span>菠萝创造者：</span><span>sky</span>
-        <span>入手价格：</span><span>20000AIGO</span>
-        <span>入手价格：</span><span>2018-03-08 12:32:22</span>
-        <span>菠萝类型：</span><span>限量可交易</span>
-        <section>
-          说明：<p>
-          infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
-          infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
-          infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
-          infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
-          infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
-          infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
-        </p>
-        </section>
+    <section class="cardSec cardCard">
+      <div class="cardBord">
+        <div class="cardContent flexCenter">
+          <img :src="cardimg" />
+        </div>
+        <div class="cardInfo cardPadd">
+          <span>创建人：</span><span>sky</span>
+          <span>创建价格：</span><span>0.20ETH</span>
+          <span>创建时间：</span><span>2018-03-08 12:32:22</span>
+          <span>菠萝章类型：</span><span>创世纪念章</span>
+          <section>
+            说明：<span>
+            infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
+          </span>
+          </section>
+        </div>
       </div>
     </section>
     <section v-show="stype" class="cardSec">
       <div class="cerInfo cardBord buySec">
         <span>价格：20,000 AIGO</span>
-        <el-button style="float: right;" type="primary">支付并拥有</el-button>
+        <el-button type="primary">支付并拥有</el-button>
       </div>
     </section>
-    <section v-show="!stype" class="cardSec">
-      <section class="cerInfo cardBord auction">
+    <section v-show="!stype" class="cardSec ">
+      <section class="cardBord auction">
         <header>
             <span>
               起拍价格：0.001ETH
@@ -57,16 +52,18 @@
         </section>
         <footer class="buySec">
           <span>菠萝会随着时间越来越低，但是等待也可能会被其他人先买走哦！</span>
-          <el-button style="float: right;" type="primary">付款购买</el-button>
+          <el-button class="payBtn" type="primary">立即购买</el-button>
         </footer>
       </section>
     </section>
     <section class="cardSec">
-      <div class="cerInfo cardBord">
-        <header class="littleTitle">认证信息</header>
+      <div class="cardBord identDiv">
+        <header class="littleTitle">
+          <span>认证信息</span>
+        </header>
         <section>
           <ul class="identiCls">
-            <li v-for="it in identification">
+            <li @click="toOther(it.userId)" v-for="it in identification">
               <div class="circleDiv pimg">
                 <img :src="logo"/>
               </div>
@@ -85,11 +82,13 @@
 <script>
   import logo from '../../assets/icon/timg.jpg'
   import echarts from 'echarts'
+  import cardimg from '../../assets/icon/card.png'
 
   export default {
     name: 'signatrueDetail',
     data() {
       return {
+        cardimg,
         stype: 0,
         logo,
         identification: [{}, {}, {}, {}, {}, {}, {}]
@@ -117,14 +116,20 @@
     methods: {
       goPrev(){
         window.history.go(-1);
+      },
+      toOther(id)
+      {
+        this.$router.push({
+          name: 'OtherDetail',
+          params: { id }})
       }
     }
   }
 </script>
 
-<style scoped>
-  @import '../../assets/css/basestyle.css';
-
+<style lang="scss" scoped>
+  @import '../../assets/css/basestyle';
+  @import "../../assets/css/sass-base";
   .homeTem {
     padding: 1.2rem 0 0 0;
     display: flex;
@@ -139,16 +144,33 @@
   }
 
   .cardBord {
-    border: 1px solid #CCCCCC;
+    /*border: 1px solid #CCCCCC;*/
+    box-shadow: 0 0 4px rgba(0,0,0,.3);
+  }
+  .identDiv{
+    >header{
+      height: 50px;
+      line-height: 50px;
+      background: $base_black;
+      color: #fff;
+      >:first-child {
+        margin: 0 20px;
+      }
+    }
+    >section:nth-child(2){
+      padding: 0 20px;
+    }
   }
 
   .cardPadd {
-    padding: 15px;
+    padding: 5px 15px 20px 15px;
   }
 
   .cardSec {
     padding: 0 3.2rem;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
   }
 
   .cardInfo > span:nth-child(2n) {
@@ -158,11 +180,15 @@
   .cardContent {
     font-family: STKaiti;
     font-size: 60px;
-    height: 300px;
+    height: 220px;
+    padding: 20px;
+    >img{
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .cardInfo {
-    height: 250px;
     font-size: 14px;
     line-height: 2;
   }
@@ -175,25 +201,41 @@
     height: 44px;
     line-height: 44px;
   }
-
+  .buySec>.payBtn{
+    width: 200px;
+    border-radius: 0px;
+    color: $base_black;
+    float: right;
+    margin-right: 25px;
+    font-weight: 700;
+  }
+  .auction > footer{
+    margin-bottom: 20px;
+  }
   .auction > footer > span {
     font-size: 12px;
     color: #6B6B6B;
+    margin-left: 20px;
   }
 
   .auction > header {
     display: flex;
     height: 50px;
+    line-height: 50px;
     font-size: 16px;
-    color: #343434;
+    color: #fff;
+    background: $base_black;
   }
 
   .auction > header :first-child {
-    margin-right: 20px;
+    margin: 0 20px;
   }
 
   .auction > header > :nth-child(3) {
     flex: 1;
+  }
+  .auction > header > :last-child{
+    margin-right: 20px;
   }
 
   .chartSec {
@@ -201,23 +243,26 @@
   }
 
   .identiCls {
-    margin-top: 20px;
+    margin: 20px 0;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
   }
 
   .identiCls > li {
+    cursor: pointer;
     flex-grow: 1;
     display: flex;
     flex-direction: row;
     align-content: center;
-    width: 300px;
-    height: 150px;
+    width: 270px;
+    height: 120px;
+    max-width: 270px;
   }
 
   .identiCls .famousPerson {
     display: flex;
+    display: -webkit-flex;
     flex-direction: column;
     justify-content: center;
   }
@@ -231,15 +276,15 @@
   .famousPerson > div:last-child {
     font-size: 12px;
     color: #6B6B6B;
-    margin-top: 20px;
+    margin-top: 15px;
   }
 
   .pimg {
     position: relative;
     top: 20px;
     margin-right: 15px;
-    height: 115px;
-    width: 115px;
+    height: 64px;
+    width: 64px;
   }
 
   .backCls{

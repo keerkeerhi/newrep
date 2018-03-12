@@ -39,8 +39,8 @@ export default {
   data () {
     return {
       activeIndex: -1,
-      navs: [{ name: 'beginning', url: '/Login' },
-        {name: 'Market', url: '/Market'}],
+      navs: [{ name: '首页', url: '/Home' },
+        {name: '市场', url: '/Market'}],
       pineapple
     }
   },
