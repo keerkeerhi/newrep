@@ -1,48 +1,49 @@
 <template>
-  <section class="homeTem">
-    <div id="searchContent">
-      <input type="text" v-model="searchContent" name="input" class="input">
-      <button type="reset" class="search" @click="searchHandle"></button>
-    </div>
+  <section class="markTem">
+    <!--<div id="searchContent">-->
+      <!--<input type="text" v-model="params.t_filter" name="input" class="input">-->
+      <!--<button type="reset" class="search" @click="searchHandle"></button>-->
+    <!--</div>-->
     <section class="navCls">
-      <el-tabs v-model="activeIndex" @tab-click="handleClick">
+      <el-tabs v-model="activeIndex" @tab-click="getBoloList('1')">
         <el-tab-pane :key="index" v-for="(it,index) in navs" :label="it.name"
                      :name="index+''"></el-tab-pane>
       </el-tabs>
     </section>
     <section class="sbanner">
-      <el-checkbox-group
-        v-model="checkedCities1">
-        <el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-      </el-checkbox-group>
-      <div>
-        <el-select class="sortSelect" clearable v-model="sortValue" placeholder="排序">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </div>
+      <!--<el-checkbox-group-->
+        <!--v-model="checkedCities1">-->
+        <!--<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>-->
+      <!--</el-checkbox-group>-->
+      <!--<div>-->
+        <!--<el-select class="sortSelect" clearable v-model="sortValue" placeholder="排序">-->
+          <!--<el-option-->
+            <!--v-for="item in options"-->
+            <!--:key="item.value"-->
+            <!--:label="item.label"-->
+            <!--:value="item.value">-->
+          <!--</el-option>-->
+        <!--</el-select>-->
+      <!--</div>-->
     </section>
-    <section style="display: none;"></section>
-    <section class="marketcontent">
+    <section v-if="activeIndex!=2" class="marketcontent">
       <div v-for="(it,index) in dataList"
            :key="index">
-        <div @click="toDetail(index)" style="display: inline-block;">
+        <div @click="toDetail(it.id)" style="display: inline-block;">
           <el-card class="box-card cardCls">
             <section class="cardBody">
-              <div>{{it.content}}</div>
+              <div>
+                <img :src="it.cover" />
+              </div>
               <div class="ownerCls">
-                <span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>
-                <div v-else-if="it.people.length==1" class="signer">
+                <!--<span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>-->
+                <div class="signer">
                   <div style="width: 60px;" class="circleDiv">
-                    <img :src="boloimg"/>
+                    <img :src="'data:image/png;base64,'+it.avatar" />
                   </div>
                   <div>
-                    <div>{{p.name}}</div>
-                    <div v-if="p.info">{{p.info}}</div>
+                    <div>{{it.nickname}}</div>
+                    <div v-if="it.mark">{{it.mark | cutWord(14) }}</div>
                   </div>
                   <div></div>
                   <div class="priceDiv">
@@ -55,25 +56,51 @@
         </div>
       </div>
     </section>
+    <section v-if="activeIndex==2">
+      <div class="famousCls" v-for="(it,index) in dataList2" :key="index">
+        <section>
+          <div class="circleDiv">
+            <img :src="bolo[it.nickname]" />
+          </div>
+          <div>{{it.pname}}</div>
+          <div>
+            <el-button @click="toOther(it.id)" class="lookAll" type="primary" >查看所有</el-button>
+          </div>
+        </section>
+        <ul>
+          <li @click="toDetail(it.id)" v-for="(i,inx) in it.sList" :key="inx">
+            <img :src="'data:image/png;base64,'+it.avatar" />
+          </li>
+        </ul>
+      </div>
+    </section>
+    <div v-if="pageInfo.total>pageInfo.pageSize" class="block pageDiv">
+      <el-pagination @current-change="pageChange"
+                   layout="prev, pager, next"
+                     :page-size="pageInfo.pageSize"
+                   :current-page="pageInfo.index"
+        :total="pageInfo.total">
+      </el-pagination>
+    </div>
   </section>
 </template>
 <script>
-  // import marketService from '../../service/marketsev'
-  import boloimg from '../../assets/icon/bolo.png';
+  import marketService from '../../service/bolosev'
+  import './Market.scss'
+
   const cityOptions = ['个人认证', '团队认证', '联合认证'];
   export default {
     name: 'market',
-    data () {
+    data() {
       return {
-        boloimg,
         activeIndex: 0,
+        types:['hot','new','famous','all'],
         navs: [
-          {name: '热门', par: {flag: 1}},
-          {name: '最新', par: {flag: 2}},
-          {name: '名人', par: {flag: 3}},
-          {name: '所有', par: {flag: 4}}
+          // {name: '热门'},
+          // {name: '最新'},
+          // {name: '名人'},
+          {name: '所有'}
         ],
-        params: {},
         checkedCities1: [],
         cities: cityOptions,
         options: [{
@@ -90,47 +117,75 @@
           label: '转手次数从少到多'
         }],
         sortValue: '',
-        dataList: [
+        dataList: [],
+        dataList2: [
           {
-            content: '不错，真不错，天生幼稚', price: 0.02,
-            people: [{name: '柯洁', header: '', info: ''}]
+            pname: '菠萝官方',
+            type: 0,
+            id: 0,
+            headerImg: '',
+            sList: [{content: '柯洁'},{content: '柯洁'},{content:'kejie'}]
           },
           {
-            content: '不错，真不错，天生幼稚', price: 0.02,
-            people: [{name: '柯洁', header: '', info: '明星玩家'}]
-          },
-          {
-            content: '不错，真不错，天生幼稚', price: 0.02,
-            people: [{name: '柯洁', header: '', info: '明星玩家'}]
-          },
-          {
-            content: '不错，真不错，天生幼稚', price: 0.02,
-            people: [{name: '柯洁', header: '', info: '明星玩家'}]
-          },
-          {
-            content: '不错，真不错，天生幼稚', price: 0.02,
-            people: [{name: '柯洁', header: '', info: '明星玩家'}]
-          },
-          {
-            content: '不错，真不错，天生幼稚', price: 0.02,
-            people: [{name: '柯洁', header: '', info: '明星玩家'}]
-          }],
-        searchContent: ''
+            pname: '周睿羊',
+            type: 1,
+            id: 1,
+            headerImg: '',
+            sList: [{content: '柯洁'},{content: '柯洁'},{content:'sss'}]
+          }
+        ],
+        params:{
+          t_type:'hot',
+          index: 0,
+          num: 10,
+          t_filter: ''
+        },
+        pageInfo: {
+          pageSize: 10,
+          total: 0,
+          index: 1
+        }
       }
     },
-    created(){
-      console.log('in......')
+    created() {
+      this.getBoloList(this.activeIndex)
+      // this.pageInfo.pageSize = 0
+    },
+    filters: {
+      cutWord(value,max) {
+        if (value.length>max)
+          return value.substr(0,max)+'...';
+        else
+          return value;
+      }
     },
     methods: {
-      handleClick (par) {
-        console.log('------------par', this.activeIndex)
-        // marketService.getList(Object.assign(this.params, par)).then(res => {
-        //
-        // })
+      pageChange(currentPage){
+        this.params.index = currentPage-1;
+        this.getBoloList();
       },
-      searchHandle () {
+      getBoloList(activeIndex) {
+        if ((typeof activeIndex)!="undefined")
+        {
+          this.params.index = 0
+          this.params.t_filter = ''
+        }
+        this.params.t_type = this.types[this.activeIndex]
+        this.dataList = []
+
+        // 只支持hot
+        this.params.t_type = 'all'
+        marketService.query_market(this.params).then(res => {
+          if ('data' in res)
+          {
+            this.dataList = res.data
+            this.pageInfo.total = res.pl;
+          }
+        })
+      },
+      searchHandle() {
         console.log('--------->', $)
-        this.searchContent = '';
+        this.params.t_filter = '';
         $('#searchContent>.search').toggleClass('close')
         $('#searchContent>.input').toggleClass('square')
         if ($('#searchContent>.search').hasClass('close')) {
@@ -139,276 +194,19 @@
           $('#searchContent>input').blur()
         }
       },
-      toDetail (id) {
+      toDetail(id) {
         console.log('------->>click', id)
         this.$router.push({
           name: 'SignatureDetail',
           params: {id}
         })
+      },
+      toOther(id)
+      {
+        this.$router.push({
+          name: 'OtherDetail',
+          params: { id }})
       }
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  @import '../../assets/css/basestyle';
-  @import '../../assets/css/sass-base';
-
-  .homeTem {
-    padding: 3.2rem 0 0 0;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  .homeTem:first-child {
-    margin: 0 1.8rem;
-  }
-
-  .clearfloat:after {
-    display: block;
-    clear: both;
-    content: "";
-    visibility: hidden;
-    height: 0
-  }
-
-  .marketcontent {
-    margin-top: 40px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .marketcontent > div {
-    flex-grow: 1;
-    max-width: 363px;
-    /*margin-right: 7px;*/
-    margin-bottom: 20px;
-  }
-
-  /*.marketcontent>div{*/
-  /*flex: 1;*/
-  /*min-width: 310px;*/
-  /*min-height: 250px;*/
-  /*display: flex;*/
-  /*justify-content: center;*/
-  /*align-items: center;*/
-  /*cursor: pointer;*/
-  /*}*/
-  .cardCls {
-    width: 330px;
-    height: 280px;
-    cursor: pointer;
-    >.el-card__body{
-      padding: 15px 15px 20px 15px;
-    }
-    &:hover {
-      box-shadow: 0 2px 12px 0 $base_yellow;
-    }
-    .cardBody {
-      height: 240px;
-      display: flex;
-      flex-direction: column;
-      >:nth-child(1) {
-        flex: 1;
-      }
-      > .ownerCls {
-        > .signer {
-          margin-top: 5px;
-          height: 64px;
-          display: flex;
-          .circleDiv {
-            height: 60px;
-            width: 60px;
-            background: $base_black;
-            margin-right: 20px;
-          }
-          >div:nth-child(2)
-          {
-            display:flex;/*Flex布局*/
-            flex-direction: column;
-            display: -webkit-flex; /* Safari */
-            /*align-items:center;!*指定垂直居中*!*/
-            justify-content: center;
-            line-height: 25px;
-            >div:first-child{
-              font-weight: bold;
-            }
-            >div:nth-child(2){
-              font-size: 14px;
-              color: $base_gray;
-            }
-          }
-          >div:nth-child(3)
-          {
-            flex: 1;
-          }
-        }
-      }
-      .priceDiv{
-        line-height: 64px;
-        .price {
-          border: 1px solid $base_black;
-          padding: 3px 15px;
-          font-size: 12px;
-        }
-      }
-    }
-  }
-
-  .sbanner {
-    display: flex;
-    flex-direction: row;
-    align-items: end;
-  }
-
-  .sbanner :first-child {
-    flex: 1;
-  }
-
-  .sbanner :nth-child(2) {
-    flex: 1;
-    text-align: right;
-  }
-
-  .navCls .el-tabs__item {
-    color: #585858;
-  }
-
-  .el-tabs__item.is-active {
-    color: $base_black;
-  }
-
-  .signListCls {
-
-  }
-
-  /*-------------------------------------搜索框开始-------------------------------*/
-  #searchContent {
-    position: absolute;
-    height: 40px;
-    width: 300px;
-    top: 40px;
-    right: -240px;
-    z-index: 10000;
-    /*transform: translate(-50%, -50%);*/
-  }
-
-  #searchContent > input {
-    box-sizing: border-box;
-    width: 50px;
-    height: 50px;
-    border: 4px solid $base_black;
-    border-radius: 50%;
-    background: none;
-    color: #343434;
-    font-size: 16px;
-    font-weight: 400;
-    font-family: Roboto;
-    outline: 0;
-    -webkit-transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out, padding 0.2s;
-    transition: width 0.4s ease-in-out, border-radius 0.8s ease-in-out, padding 0.2s;
-    -webkit-transition-delay: 0.4s;
-    transition-delay: 0.4s;
-    -webkit-transform: translate(-100%, -50%);
-    -ms-transform: translate(-100%, -50%);
-    transform: translate(-100%, -50%);
-  }
-
-  #searchContent > .search {
-    background: none;
-    position: absolute;
-    top: 0px;
-    left: 0;
-    height: 50px;
-    width: 50px;
-    padding: 0;
-    border-radius: 100%;
-    outline: 0;
-    border: 0;
-    color: inherit;
-    cursor: pointer;
-    -webkit-transition: 0.2s ease-in-out;
-    transition: 0.2s ease-in-out;
-    -webkit-transform: translate(-100%, -50%);
-    -ms-transform: translate(-100%, -50%);
-    transform: translate(-100%, -50%);
-  }
-
-  #searchContent > .search:before {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 4px;
-    background-color: yellow;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    margin-top: 26px;
-    margin-left: 17px;
-    -webkit-transition: 0.2s ease-in-out;
-    transition: 0.2s ease-in-out;
-  }
-
-  #searchContent > .close {
-    -webkit-transition: 0.4s ease-in-out;
-    transition: 0.4s ease-in-out;
-    -webkit-transition-delay: 0.4s;
-    transition-delay: 0.4s;
-  }
-
-  #searchContent > .close:before {
-    content: "";
-    position: absolute;
-    width: 27px;
-    height: 4px;
-    margin-top: -1px;
-    margin-left: -13px;
-    background-color: yellow;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-    -webkit-transition: 0.2s ease-in-out;
-    transition: 0.2s ease-in-out;
-  }
-
-  #searchContent > .close:after {
-    content: "";
-    position: absolute;
-    width: 27px;
-    height: 4px;
-    background-color: $base_black;
-    margin-top: -1px;
-    margin-left: -13px;
-    cursor: pointer;
-    -webkit-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-  }
-
-  #searchContent > .square {
-    box-sizing: border-box;
-    padding: 0 40px 0 10px;
-    width: 300px;
-    height: 50px;
-    border: 4px solid $base_black;
-    border-radius: 20px;
-    background: none;
-    color: #343434;
-    font-family: Roboto;
-    font-size: 16px;
-    font-weight: 400;
-    outline: 0;
-    -webkit-transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out, padding 0.2s;
-    transition: width 0.4s ease-in-out, border-radius 0.4s ease-in-out, padding 0.2s;
-    -webkit-transition-delay: 0.4s, 0s, 0.4s;
-    transition-delay: 0.4s, 0s, 0.4s;
-    -webkit-transform: translate(-100%, -50%);
-    -ms-transform: translate(-100%, -50%);
-    transform: translate(-100%, -50%);
-  }
-
-  /*-------------------------------------搜索框结束-------------------------------*/
-</style>

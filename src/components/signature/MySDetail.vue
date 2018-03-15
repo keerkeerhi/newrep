@@ -1,5 +1,5 @@
 <template>
-  <section class="homeTem">
+  <section class="mshomeTem">
     <div class="backCls">
       <section class="backClsBlob" @click="goPrev()">
         <i class="icon-icon- iconfont" />
@@ -12,17 +12,17 @@
     <section class="cardSec cardCard">
       <div class="cardBord">
         <div class="cardContent flexCenter">
-          <img :src="cardimg" />
+          <img :src="boloInfo.pine_apple" />
         </div>
-        <div class="cardInfo cardPadd">
-          <span>创建人：</span><span>sky</span>
-          <span>创建价格：</span><span>0.20ETH</span>
-          <span>创建时间：</span><span>2018-03-08 12:32:22</span>
-          <span>菠萝章类型：</span><span>创世纪念章</span>
+        <div class="cardPadd">
           <section>
-            说明：<span>
-            infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
-          </span>
+            <div><span>创建人：</span><span>{{boloInfo.c_user}}</span></div>
+            <div><span>创建价格：</span><span>{{boloInfo.c_price}}ETH</span></div>
+            <div><span>创建时间：</span><span>{{boloInfo.c_time}}</span></div>
+            <div><span>菠萝章类型：</span><span>{{boloInfo.p_type}}</span></div>
+          </section>
+          <section>
+            说明：<span>{{boloInfo.info}}</span>
           </section>
         </div>
       </div>
@@ -34,13 +34,13 @@
         </header>
         <section>
           <ul class="identiCls">
-            <li @click="toOther(it.userId)" v-for="it in identification">
+            <li @click="toOther(boloInfo.wallet)" v-for="it in identification">
               <div class="circleDiv pimg">
-                <img :src="logo"/>
+                <img :src="'data:image/png;base64,'+boloInfo.avatar" />
               </div>
               <div class="famousPerson">
-                <div>柯洁</div>
-                <div>高级玩家信息</div>
+                <div>{{boloInfo.nickname}}</div>
+                <div>{{boloInfo.mark}}</div>
               </div>
             </li>
           </ul>
@@ -51,46 +51,57 @@
 </template>
 
 <script>
-  import logo from '../../assets/icon/timg.jpg'
-  import echarts from 'echarts'
-  import cardimg from '../../assets/icon/card.png'
+  import boloService from '../../service/bolosev'
 
   export default {
     name: 'signatrueDetail',
     data() {
       return {
-        cardimg,
         stype: 0,
-        logo,
-        identification: [{userId:1}, {userId:1},
-          {userId:2}, {userId:3}, {userId:4}, {userId:5}, {userId:6}]
+        identification: [{}],
+        pid: '',
+        boloInfo: {
+          p_type: '',
+          nickname: '',
+          avatar: '',
+          mark: '',
+          c_type: '',
+          pine_apple: '',
+          c_time: '',
+          wallet: '',
+          price: '',
+          status: '', //菠萝状态，sale表示在售，lock表示锁定，sold表示已售，collect表示收藏
+          start_time: '2018-01-22 10:10:52',
+          end_time: '2018-01-22 10:11:22',
+          start_price: '',
+          end_price: '',
+          info: '',
+          c_user: '',
+          abi: '',
+          contract: '',
+        }
       }
     },
-    mounted() {
-      let chartSec = document.getElementById('chartSec')
-      let chartBody = echarts.init(chartSec)
-      let option = {
-        xAxis: {
-          type: 'category',
-          data: ['12', '13', '14', '15']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
-          data: [10,9,8,7],
-          type: 'line'
-        }]
-      };
-      chartBody.setOption(option)
-      console.log('--------------菠萝详情')
+    created() {
+      this.pid = this.$route.params.id;
+      boloService.pine_apple_detail({pid: this.pid}).then(res => {
+        if (res.code == 0) {
+          this.boloInfo = res.data
+        }
+        else
+          this.$message({
+            message: '菠萝找不到了！',
+            type: 'warning'
+          });
+      })
     },
     methods: {
       goPrev(){
         window.history.go(-1);
       },
-      toOther(id)
+      toOther(cid)
       {
+        let id  = cid.toLowerCase();
         this.$router.push({
           name: 'OtherDetail',
           params: { id }})
@@ -102,7 +113,7 @@
 <style lang="scss" scoped>
   @import '../../assets/css/basestyle';
   @import "../../assets/css/sass-base";
-  .homeTem {
+  .mshomeTem {
     padding: 1.2rem 0 0 0;
     display: flex;
     flex-direction: column;
@@ -134,19 +145,11 @@
     }
   }
 
-  .cardPadd {
-    padding: 5px 15px 20px 15px;
-  }
-
   .cardSec {
     padding: 0 3.2rem;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
-  }
-
-  .cardInfo > span:nth-child(2n) {
-    margin-right: 40px;
   }
 
   .cardContent {
@@ -160,9 +163,22 @@
     }
   }
 
-  .cardInfo {
-    font-size: 14px;
-    line-height: 2;
+  .cardPadd {
+    padding: 10px 20px 45px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    >section:first-child{
+      display: flex;
+      display: -webkit-flex;
+      flex-direction: row;
+      margin-bottom: 25px;
+      >div{
+        flex: 1;
+        >span:first-child{
+          margin-right: 10px;
+        }
+      }
+    }
   }
 
   .cerInfo {

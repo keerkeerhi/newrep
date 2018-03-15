@@ -5,23 +5,21 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import './assets/css/element-variables.scss'
-// 组件之间数据传递
-import Vuex from 'vuex'
 
 // axios 官方推荐API
 import axios from 'axios'
-
+import store from './store'
 // import "babel-polyfill"
 
 Vue.config.productionTip = false
-// 光引用不成，还得使用
-Vue.use(Vuex)
 Vue.prototype.$http = axios
 Vue.use(ElementUI)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

@@ -1,0 +1,172 @@
+@import "assets/css/style";
+@import "assets/font/iconfont.css";
+@import "assets/css/sass-base";
+
+#app {
+  font-family: 微软雅黑;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $base_black;
+  height: 90%;
+  margin-top: 48px;
+}
+
+.clearfloat:after {
+  display: block;
+  clear: both;
+  content: "";
+  visibility: hidden;
+  height: 0
+}
+
+.rootDiv {
+  background: #fff;
+}
+
+#header {
+  display: flex;
+  flex-direction: row;
+  line-height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  z-index: 800;
+  color: #A7A7A7;
+  background: $base_black;
+}
+
+#header .logo {
+  margin: 4px 0 0 3.2rem;
+  height: 40px;
+  cursor: pointer;
+}
+
+#header > div {
+  flex: 1;
+  height: 48px;
+  line-height: 48px;
+}
+
+#header > div:nth-child(2) {
+  text-align: center;
+}
+
+.addShadow {
+  box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+}
+
+.navUl {
+  display: inline-block;
+}
+
+.navUl > li {
+  float: left;
+  width: 100px;
+  text-align: center;
+  height: 46px;
+  line-height: 46px;
+  cursor: pointer;
+}
+
+.navUl .router-link-active, .minetitle.router-link-active {
+  color: $base_yellow;
+  border-bottom: 2px solid $base_yellow;
+}
+
+.mineInfo {
+  text-align: right;
+}
+
+.mineInfo > .minetitle {
+  float: right;
+  height: 46px;
+  margin-right: 3.2rem;
+  cursor: pointer;
+}
+
+.minetitle > .iconfont {
+  font-size: 35px;
+}
+
+.footer {
+  background: $base_black;
+  height: 150px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  >section:first-child{
+    margin-left: 220px;
+    color: $logo_color;
+    >img{
+      height: 65px;
+      width: 65px;
+      margin-bottom: 10px;
+    }
+  }
+  >section:nth-child(2){
+    flex: 1;
+  }
+  >section:nth-child(3){
+    margin-right: 100px;
+    >a{
+      text-decoration: none;
+    }
+    >.twitter{
+      display: flex;
+      flex-direction: row;
+      color: #fff;
+      cursor: pointer;
+      align-items: center;
+      >div:first-child{
+        margin-right: 20px;
+        width: 25px;
+        height: 25px;
+        background: url("./assets/icon/twitter1.png") no-repeat center;
+        background-size: 120%;
+      }
+      &:hover{
+        color: $logo_color;
+        div:first-child{
+          background: url("./assets/icon/twitter2.png") no-repeat center;
+          background-size: 120%;
+        }
+      }
+    }
+    >.telegram{
+      margin-top: 20px;
+      display: flex;
+      flex-direction: row;
+      color: #fff;
+      cursor: pointer;
+      align-items: center;
+      >div:first-child{
+        margin-right: 20px;
+        width: 25px;
+        height: 25px;
+        background: url("./assets/icon/telegram1.png") no-repeat center;
+        background-size: 120%;
+      }
+      &:hover{
+        color: $logo_color;
+        div:first-child{
+          background: url("./assets/icon/telegram1.png") no-repeat center;
+          background-size: 120%;
+        }
+      }
+    }
+  }
+  >section:last-child{
+    margin-right: 220px;
+  }
+}
+
+.footer > span {
+  cursor: pointer;
+}
+
+.footer > span:first-child {
+  margin-right: 20px;
+}

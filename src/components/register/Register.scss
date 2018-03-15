@@ -1,0 +1,52 @@
+@import '../../assets/css/sass-base';
+@import '../../assets/css/basestyle';
+
+.startPlay{
+  width: 200px;
+  color: $base_black;
+  font-weight: 600;
+  border-radius: 1px;
+  margin-top: 40px;
+}
+.el-form-item.is-success .el-input__inner, .el-form-item.is-success .el-input__inner:focus,
+.el-form-item.is-success .el-textarea__inner, .el-form-item.is-success .el-textarea__inner:focus{
+  border-color: $base_yellow;
+}
+
+.homeTem {
+  display: flex;
+  display: -webkit-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  >section{
+    flex:1;
+  }
+  >section:nth-child(2){
+    text-align: center;
+    >div:nth-child(2){
+      margin-top: 30px;
+      font-size: 25px;
+      font-weight: 500;
+      color: $base_gray;
+    }
+    >section:nth-child(3){
+      margin-top: 40px;
+      text-align: center;
+      >.circleDiv{
+        display: inline-block;
+        background: $base_black;
+        width: 100px;
+        height: 100px;
+      }
+    }
+    .demo-ruleForm{
+      margin-top: 100px;
+    }
+    >h2{
+      margin-top: 150px;
+      font-size: 45px;
+      font-weight: 700;
+    }
+  }
+}

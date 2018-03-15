@@ -1,9 +1,8 @@
 <template>
-  <section class="homeTem">
+  <section class="siHomeTem">
     <div class="backCls">
       <section class="backClsBlob" @click="goPrev()">
-        <i class="icon-icon- iconfont" />
-        <span>返回</span>
+        <i class="icon-fanhui iconfont"/>
       </section>
       <!--<section class="backClsBlob">-->
       <!--</section>-->
@@ -12,47 +11,82 @@
     <section class="cardSec cardCard">
       <div class="cardBord">
         <div class="cardContent flexCenter">
-          <img :src="cardimg" />
+          <img :src="boloInfo.pine_apple" />
         </div>
-        <div class="cardInfo cardPadd">
-          <span>创建人：</span><span>sky</span>
-          <span>创建价格：</span><span>0.20ETH</span>
-          <span>创建时间：</span><span>2018-03-08 12:32:22</span>
-          <span>菠萝章类型：</span><span>创世纪念章</span>
+        <div class="cardPadd">
           <section>
-            说明：<span>
-            infoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfoinfoinfosomeinfo
-          </span>
+            <div><span>创建人：</span><span>{{boloInfo.c_user}}</span></div>
+            <div><span>创建价格：</span><span>{{boloInfo.c_price}}ETH</span></div>
+            <div><span>创建时间：</span><span>{{boloInfo.c_time}}</span></div>
+            <div><span>菠萝章类型：</span><span>{{boloInfo.p_type}}</span></div>
+          </section>
+          <section>
+            说明：<span>{{boloInfo.info}}</span>
           </section>
         </div>
+        <hr v-show="map.beginMoney==map.endMoney" style="margin: 0 20px;"/>
+        <section v-show="map.beginMoney==map.endMoney">
+          <div class="cerInfo buySec">
+            <span>价格：<span class="priceCls">{{boloInfo.price}} ETH</span></span>
+            <el-button class="payBtn" type="primary">支付并拥有</el-button>
+          </div>
+        </section>
       </div>
     </section>
-    <section v-show="stype" class="cardSec">
-      <div class="cerInfo cardBord buySec">
-        <span>价格：20,000 AIGO</span>
-        <el-button type="primary">支付并拥有</el-button>
-      </div>
-    </section>
-    <section v-show="!stype" class="cardSec ">
+    <section v-show="map.beginMoney!=map.endMoney" class="cardSec ">
       <section class="cardBord auction">
         <header>
             <span>
-              起拍价格：0.001ETH
+              起拍价格：{{boloInfo.start_price}}ETH
             </span>
           <span>
-              当前价格：0.0039ETH
+              当前价格：{{boloInfo.price}}ETH
             </span>
           <span></span>
           <span>
-              剩余时间：10:10:23
-            </span>
+              剩余时间：{{this.remainTime}}
+          </span>
         </header>
-        <section id="chartSec" class="chartSec">
-
+        <section class="chartSec">
+          <svg width="1200" height="300" xmlns="http://www.w3.org/2000/svg">
+            <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+            <g>
+              <title>价格图示</title>
+              <rect fill="#ffffff" id="canvas_background" height="302" width="762" y="-1" x="-1"/>
+              <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+                <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+              </g>
+            </g>
+            <g>
+              <title>当前价格{{boloInfo.price}}ETH</title>
+              <!-- 左y轴 -->
+              <line v-if="map.beginMoney>map.endMoney" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_8"
+                    y2="276" x2="13.5" y1="14" x1="13.5" stroke-width="1.5" stroke="#000" fill="none"/>
+              <!-- x轴 -->
+              <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_9" y2="276" x2="1186.5" y1="276"
+                    x1="13.5" stroke-width="1.5" stroke="#000" fill="none"/>
+              <!-- 右y轴 -->
+              <line v-if="map.beginMoney<map.endMoney" stroke-linecap="undefined" stroke-linejoin="undefined"
+                    id="svg_10" y2="14" x2="748.5" y1="276" x1="1186.5" stroke-width="1.5" stroke="#000" fill="none"/>
+              <!-- 从左到右下降 -->
+              <line v-if="map.beginMoney>map.endMoney" stroke-linecap="undefined" stroke-linejoin="undefined"
+                    id="svg_14" y2="276" x2="1186.5" y1="14" x1="13.5" stroke-width="1.5" stroke="#000" fill="none"/>
+              <!-- 从左到右上升 -->
+              <line v-if="map.beginMoney<map.endMoney" stroke-linecap="undefined" stroke-linejoin="undefined"
+                    id="svg_15" y2="13.5" x2="1186.5" y1="276" x1="12.5" stroke-width="1.5" stroke="#000" fill="none"/>
+              <!-- 圆圈 -->
+              <ellipse ry="7.5" rx="6" id="svg_18" :cy="map.cy" :cx="map.cx" stroke-opacity="null" stroke-width="1.5"
+                       stroke="#000" fill="#ffe000"/>
+            </g>
+          </svg>
+          <section class="timeDiv">
+            <span>开始时间：{{boloInfo.start_time}}</span>
+            <span>结束时间：{{boloInfo.end_time}}</span>
+          </section>
         </section>
         <footer class="buySec">
           <span>菠萝会随着时间越来越低，但是等待也可能会被其他人先买走哦！</span>
-          <el-button class="payBtn" type="primary">立即购买</el-button>
+          <el-button class="payBtn" type="primary" @click="paySign()">立即购买</el-button>
         </footer>
       </section>
     </section>
@@ -63,13 +97,13 @@
         </header>
         <section>
           <ul class="identiCls">
-            <li @click="toOther(it.userId)" v-for="it in identification">
+            <li @click="toOther(boloInfo.wallet)" v-for="it in identification">
               <div class="circleDiv pimg">
-                <img :src="logo"/>
+                <img :src="'data:image/png;base64,'+boloInfo.avatar"/>
               </div>
               <div class="famousPerson">
-                <div>柯洁</div>
-                <div>高级玩家信息</div>
+                <div>{{boloInfo.nickname}}</div>
+                <div>{{boloInfo.mark}}</div>
               </div>
             </li>
           </ul>
@@ -80,49 +114,166 @@
 </template>
 
 <script>
-  import logo from '../../assets/icon/timg.jpg'
-  import echarts from 'echarts'
-  import cardimg from '../../assets/icon/card.png'
+  import boloService from '../../service/bolosev'
+  import {translatSecond, DatetoSecond} from "../common/Util"
+  import {getBC, bidBolo} from "../common/web3Util"
 
   export default {
     name: 'signatrueDetail',
     data() {
       return {
-        cardimg,
         stype: 0,
-        logo,
-        identification: [{}, {}, {}, {}, {}, {}, {}]
+        identification: [{}],
+        map: {
+          xPercent: 0.1,
+          beginMoney: 20,
+          endMoney: 10,
+          price: 2,
+          cy: 10,
+          cx: 10
+        },
+        pid: '',
+        boloInfo: {
+          p_type: '',
+          nickname: '',
+          avatar: '',
+          mark: '',
+          c_type: '',
+          pine_apple: '',
+          c_time: '',
+          wallet: '',
+          price: '',
+          status: '', //菠萝状态，sale表示在售，lock表示锁定，sold表示已售，collect表示收藏
+          start_time: '',
+          end_time: '',
+          start_price: '',
+          end_price: '',
+          info: '',
+          c_user: '',
+          abi: '',
+          contract: '',
+        },
+        remainTime: '',
+        number: 0,
+        interV: 0,
+        wallet: '',
+        transCode: ''
       }
     },
+    created() {
+      this.pid = this.$route.params.id;
+      boloService.pine_apple_detail({pid: this.pid}).then(res => {
+        if (res.code == 0) {
+          this.boloInfo = res.data
+          // this.boloInfo.start_time = '2018-01-22 10:10:52';
+          // this.boloInfo.end_time = '2018-3-14 15:40:22';
+          this.startTime();
+        }
+        else
+          this.$message({
+            message: '菠萝找不到了！',
+            type: 'warning'
+          });
+      })
+    },
     mounted() {
-      let chartSec = document.getElementById('chartSec')
-      let chartBody = echarts.init(chartSec)
-      let option = {
-        xAxis: {
-          type: 'category',
-          data: ['12', '13', '14', '15']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
-          data: [10,9,8,7],
-          type: 'line'
-        }]
-      };
-      chartBody.setOption(option)
       console.log('--------------菠萝详情')
     },
     methods: {
-      goPrev(){
+      getCurrentPrice() {
+        let {start_price, start_time, end_time, end_price} = this.boloInfo;
+        // if (start_price==end_price)
+        //   return start_price;
+        return start_price +
+          (
+            (end_price - start_price) /
+            (DatetoSecond(end_time) - DatetoSecond(start_time))
+          ) * (DatetoSecond(new Date()) - DatetoSecond(start_time))
+      },
+      setWallet() {
+        try {
+          this.wallet = web3.eth.defaultAccount
+          if (!this.wallet)
+            throw new Error('钱包需要解锁')
+        } catch (e) {
+          this.$router.push('/Login');
+        }
+      },
+      paySign() {
+        this.setWallet()
+        let abi = JSON.parse(this.boloInfo.abi.substr(1,this.boloInfo.abi.length-2));
+        // 获取合约主体
+        let bc = web3.eth.contract(abi).at(this.boloInfo.contract)
+        console.log('------>ok',this.boloInfo)
+        //getBC(this.boloInfo.abi, this.boloInfo.contract)
+        // 计算当前价格
+        let sale_amount = (this.getCurrentPrice() + 0.001).toFixed(6)
+        let really_amount = web3.toWei(sale_amount, "ether")
+        console.log('----------->>>',sale_amount)
+        // 开始交易
+        bidBolo(bc, this.boloInfo.token, really_amount, this.wallet, (transCode) => {
+          this.transCode = transCode
+          walletService.sale_record({pid: this.pid, wallet: this.wallet, tx:this.transCode}).then(res => {
+            if (res.code == 0) {
+              this.$message({
+                message: '写入记录！',
+                type: 'success'
+              });
+            }
+          })
+        }, () => {
+          this.$message({
+            message: '交易取消！',
+            type: 'warning'
+          });
+        }, (contractAddress) => {
+          this.$message({
+            message: '交易成功！',
+            type: 'success'
+          });
+        })
+      },
+      startTime() {
+        let st = Math.floor(Date.now() / 1000)
+        let et = Math.floor(Date.parse(this.boloInfo.end_time) / 1000)
+        let total = et - st;
+        this.number = total;
+        this.interV = setInterval(() => {
+          this.number--;
+          if (this.number >= 0) {
+            this.map.xPercent = (total - this.number) / total
+            // console.log('------->>>', this.map.xPercent)
+            this.calcPercent()
+            this.remainTime = translatSecond(this.number)
+          }
+          else
+            clearInterval(this.interV)
+        }, 1000)
+      },
+      calcPercent() {
+        let mp = this.map;
+        if (mp.beginMoney < mp.endMoney) {
+          mp.cy = 276 - 262 * mp.xPercent;
+          mp.cx = 13.5 + 1173 * mp.xPercent;
+        }
+        else {
+          mp.cy = 14 + 262 * mp.xPercent;
+          mp.cx = 13.5 + 1173 * mp.xPercent;
+        }
+      },
+      goPrev() {
         window.history.go(-1);
       },
-      toOther(id)
-      {
+      toOther(id) {
         this.$router.push({
           name: 'OtherDetail',
-          params: { id }})
+          params: {id}
+        })
       }
+    },
+    beforeDestroy() {
+      console.log('--------------离开之前销毁定时器')
+      clearInterval(this.interV)
     }
   }
 </script>
@@ -130,8 +281,8 @@
 <style lang="scss" scoped>
   @import '../../assets/css/basestyle';
   @import "../../assets/css/sass-base";
-  .homeTem {
-    padding: 1.2rem 0 0 0;
+
+  .siHomeTem {
     display: flex;
     flex-direction: column;
   }
@@ -145,25 +296,41 @@
 
   .cardBord {
     /*border: 1px solid #CCCCCC;*/
-    box-shadow: 0 0 4px rgba(0,0,0,.3);
+    box-shadow: 0 0 4px rgba(0, 0, 0, .3);
   }
-  .identDiv{
-    >header{
+
+  .identDiv {
+    margin-bottom: 35px;
+    > header {
       height: 50px;
       line-height: 50px;
       background: $base_black;
       color: #fff;
-      >:first-child {
+      > :first-child {
         margin: 0 20px;
       }
     }
-    >section:nth-child(2){
+    > section:nth-child(2) {
       padding: 0 20px;
     }
   }
 
   .cardPadd {
-    padding: 5px 15px 20px 15px;
+    padding: 10px 20px 45px 20px;
+    font-weight: bold;
+    font-size: 16px;
+    >section:first-child{
+      display: flex;
+      display: -webkit-flex;
+      flex-direction: row;
+      margin-bottom: 25px;
+      >div{
+        flex: 1;
+        >span:first-child{
+          margin-right: 10px;
+        }
+      }
+    }
   }
 
   .cardSec {
@@ -173,35 +340,32 @@
     flex-direction: column;
   }
 
-  .cardInfo > span:nth-child(2n) {
-    margin-right: 40px;
-  }
-
   .cardContent {
     font-family: STKaiti;
     font-size: 60px;
     height: 220px;
     padding: 20px;
-    >img{
+    > img {
       width: 100%;
       height: 100%;
     }
   }
 
-  .cardInfo {
-    font-size: 14px;
-    line-height: 2;
-  }
-
   .cerInfo {
     padding: 15px;
+    .priceCls {
+      margin-left: 20px;
+      font-weight: 700;
+      font-size: 20px;
+    }
   }
 
   .buySec {
     height: 44px;
     line-height: 44px;
   }
-  .buySec>.payBtn{
+
+  .buySec > .payBtn {
     width: 200px;
     border-radius: 0px;
     color: $base_black;
@@ -209,9 +373,11 @@
     margin-right: 25px;
     font-weight: 700;
   }
-  .auction > footer{
-    margin-bottom: 20px;
+
+  .auction > footer {
+    margin: 20px;
   }
+
   .auction > footer > span {
     font-size: 12px;
     color: #6B6B6B;
@@ -234,12 +400,17 @@
   .auction > header > :nth-child(3) {
     flex: 1;
   }
-  .auction > header > :last-child{
+
+  .auction > header > :last-child {
     margin-right: 20px;
   }
 
   .chartSec {
-    height: 200px;
+    height: 400px;
+    text-align: center;
+    > svg {
+      margin-top: 50px;
+    }
   }
 
   .identiCls {
@@ -287,23 +458,40 @@
     width: 64px;
   }
 
-  .backCls{
+  .backCls {
+    margin-top: 1.2rem;
     margin-left: 3.2rem;
     height: 48px;
     line-height: 48px;
     display: flex;
     flex-direction: row;
   }
-  .backClsBlob{
+
+  .backClsBlob {
     cursor: pointer;
   }
-  .backClsBlob>i{
-    font-size: 40px;
+
+  .backClsBlob > i {
+    font-size: 20px;
   }
-  .backClsBlob>span{
+
+  .backClsBlob > span {
     position: relative;
     top: -5px;
     margin-left: 10px;
     font-size: 16px;
+  }
+  .timeDiv{
+    margin: 15px 0;
+    display: inline-block;
+    width: 1400px;
+    font-weight: bold;
+    font-size: 16px;
+    >span:first-child{
+      float: left;
+    }
+    >span:nth-child(2){
+      float: right;
+    }
   }
 </style>

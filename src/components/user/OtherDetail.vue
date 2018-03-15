@@ -1,18 +1,18 @@
 <template>
-  <section class="homeTem">
+  <section class="odhomeTem">
     <section class="invateFriend">
       <section class="personInfo">
         <div class="circleDiv">
-          <img :src="logo"/>
+          <img :src="'data:image/png;base64,'+userInfo.avatar"/>
         </div>
         <div class="infoDetail">
           <div>
-            <span class="pname">柯杰</span>
+            <span class="pname">{{userInfo.nickname}}</span>
             <!--<i class="icon-bianji iconfont" />-->
           </div>
           <div class="infoCeri gray-font">
             <!--<i class="iconfont icon-anquanrenzheng" />-->
-            <span>围棋五段</span>
+            <span>{{userInfo.mark}}</span>
           </div>
           <!--<div class="infoTeam gray-font">-->
           <!--<i class="iconfont icon-kulian" /><span>尚未加入团队</span>-->
@@ -20,9 +20,9 @@
         </div>
       </section>
       <section>
-        <el-button class="inviteBtn" type="primary" icon="el-icon-share">
-          邀请好友获取奖励
-        </el-button>
+        <!--<el-button class="inviteBtn" type="primary" icon="el-icon-share">-->
+          <!--邀请好友获取奖励-->
+        <!--</el-button>-->
       </section>
     </section>
     <section>
@@ -38,22 +38,12 @@
             <el-card class="box-card cardCls">
               <section class="cardBody">
                 <div>
-                  <img style="width: 100%;" :src="bolo" />
+                  <img style="width: 100%;" :src="it.cover" />
                 </div>
                 <div class="ownerCls">
-                  <span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>
-                  <div v-else-if="it.people.length==1" class="signer">
-                    <div style="width: 60px;" class="circleDiv">
-                      <img :src="logo"/>
-                    </div>
-                    <div>
-                      <div>{{p.name}}</div>
-                      <div v-if="p.info">{{p.info}}</div>
-                    </div>
-                    <div></div>
-                    <div class="priceDiv">
-                      <span class="price">{{it.price}}ETH</span>
-                    </div>
+                  <!--<span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>-->
+                  <div class="signer">
+                    <el-button class="startPlay" @click.stop >领取</el-button>
                   </div>
                 </div>
               </section>
@@ -66,33 +56,46 @@
 </template>
 
 <script>
-  import logo from '../../assets/icon/timg.jpg'
-  import bolo from '../../assets/icon/img.png'
+  import userService from '../../service/userev'
+  import boloService from '../../service/bolosev'
+  import {isArray} from "../common/Util"
+
   export default {
     name: 'OtherDetail',
     data () {
       return {
-        bolo,
+        dataList:[],
+        userInfo: {
+          nickname: '',
+          avatar: '',
+          is_verify: '',
+          share_code: '',
+          mark: ''
+        },
+        params: {
+          wallet:'',
+          index: 0,
+          num: 10,
+          t_type : 'mine'
+        },
         activeIndex: 0,
         navs: [
-          {name: '粉丝专属章', par: {flag: 1}},
-          {name: '他拥有的章', par: {flag: 2}},
-          {name: '他发起的菠萝', par: {flag: 3}},
-          {name: '他认证的菠萝', par: {flag: 4}}
+          // {name: '粉丝专属章', par: {flag: 1}},
+          {name: '他拥有的章', par: 'mine'},
+          // {name: '他发起的菠萝', par: {flag: 3}},
+          {name: '他认证的菠萝', par: 'auth'}
         ],
-        dataList:[
-          {content:'不错，真不错，天生幼稚',price:0.02,
-            people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-          {content:'不错，真不错，天生幼稚',price:0.02,
-            people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-          {content:'不错，真不错，天生幼稚',price:0.02,
-            people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-          {content:'不错，真不错，天生幼稚',price:0.02,
-            people:[{name:'柯洁',header:'',info:'明星玩家'}]},
-          {content:'不错，真不错，天生幼稚',price:0.02,
-            people:[{name:'柯洁',header:'',info:'明星玩家'}]}],
-        logo
       }
+    },
+    created(){
+      this.params.wallet = this.$route.params.id.toLowerCase();
+      userService.user_info({wallet:this.params.wallet}).then(res=>{
+        if (res.data)
+        {
+          this.userInfo = res.data
+        }
+      })
+      this.getBolo()
     },
     methods:{
       toDetail (id) {
@@ -103,10 +106,20 @@
       },
       handleClick (par) {
         console.log('------------par', this.activeIndex)
+        this.getBolo()
         // marketService.getList(Object.assign(this.params, par)).then(res => {
         //
         // })
       },
+      getBolo(){
+        this.params['t_type'] = this.navs[this.activeIndex].par
+        boloService.query_pine_apple(this.params).then(res=>{
+          if (isArray(res.data))
+          {
+            this.dataList = res.data;
+          }
+        })
+      }
     }
   }
 </script>
@@ -116,12 +129,13 @@
   @import "../../assets/css/basestyle";
   @import "../../assets/css/sass-base";
 
-  .homeTem{
-    padding: 1.2rem 0 0 0;
+  .odhomeTem{
+    padding: 0 1.2rem;
     display: flex;
     flex-direction: column;
   }
   .invateFriend{
+    margin-top: 3.2rem;
     padding: 0 6rem;
     display:flex;/*Flex布局*/
     display: -webkit-flex; /* Safari */
@@ -192,6 +206,7 @@
   }
   .marketcontent>div{
     flex-grow: 1;
+    max-width: 363px;
     /*flex-basis: 0%;*/
     /*margin-right: 7px;*/
     margin-bottom: 20px;
@@ -204,7 +219,7 @@
       padding: 15px 15px 20px 15px;
     }
     &:hover {
-      box-shadow: 0 2px 12px 0 $base_yellow;
+      box-shadow: 0 2px 12px 0 $base_black;
     }
     .cardBody {
       height: 240px;
@@ -212,11 +227,16 @@
       flex-direction: column;
       >:nth-child(1) {
         flex: 1;
+        >img{
+          height: 100%;
+          width: 100%;
+        }
       }
       > .ownerCls {
         > .signer {
           margin-top: 5px;
           height: 64px;
+          line-height: 64px;
           display: flex;
           .circleDiv {
             height: 60px;
@@ -272,5 +292,21 @@
 
   .el-tabs__item.is-active {
     color: $base_black;
+  }
+  .startPlay{
+    width: 180px;
+    height: 40px;
+    display: inline-block;
+    margin-top: 11.5px;
+    /*line-height: 35px;*/
+    background: $base_black;
+    color: $base_yellow;
+    font-weight: 600;
+    margin: 18px auto 10px;
+    /* border-radius: 1px;
+     margin-top: 40px;*/
+  }
+  .startPlay:hover{
+    background: #757575;
   }
 </style>
