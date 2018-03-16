@@ -20,7 +20,9 @@
   visibility: hidden;
   height: 0
 }
-
+.boloFont{
+  font-family: myFont;
+}
 .marketcontent {
   margin-top: 20px;
   display: flex;
@@ -47,7 +49,7 @@
 /*}*/
 .cardCls {
   width: 330px;
-  height: 280px;
+  height: 296px;
   cursor: pointer;
   > .el-card__body {
     padding: 15px 15px 20px 15px;
@@ -56,16 +58,27 @@
     box-shadow: 0 2px 12px 0 $base_black;
   }
   .cardBody {
-    height: 240px;
+    height: 256px;
     display: flex;
     flex-direction: column;
+    //box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
     > :nth-child(1) {
       flex: 1;
-      >img{
-        height: 100%;
-        width: 100%;
+      width: 300px;
+      height: 179px;
+      background: $base_yellow;
+      //>img{
+      //  height: 179px;
+      //  width: 300px;
+      //}
+
+      >.boloImg{
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
       }
     }
+
     > .ownerCls {
       > .signer {
         margin-top: 5px;

@@ -133,7 +133,7 @@
     display: -webkit-flex;
     align-items: center;
     position: absolute;
-    top: calc(50% - 132px);
+    /*top: calc(50% - 132px);*/
     left: calc(50% - 332.5px);
   }
 

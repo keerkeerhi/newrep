@@ -29,11 +29,15 @@
     <section v-if="activeIndex!=2" class="marketcontent">
       <div v-for="(it,index) in dataList"
            :key="index">
-        <div @click="toDetail(it.id)" style="display: inline-block;">
+        <!--@click="toDetail(it.id)"-->
+        <a :href="'/#/SignatureDetail/'+it.id"  style="display: inline-block;text-decoration: none;">
           <el-card class="box-card cardCls">
             <section class="cardBody">
-              <div>
-                <img :src="it.cover" />
+              <div style="position: relative;">
+                <!--<img :src="it.cover" />-->
+                <span class="boloFont">卞相壹登录菠萝</span>
+                <initial-bolo class="boloImg" :img="initialBolo" width="145" height="145"
+                              :data="{dateTime:'2018.03.10'}" />
               </div>
               <div class="ownerCls">
                 <!--<span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>-->
@@ -53,7 +57,7 @@
               </div>
             </section>
           </el-card>
-        </div>
+        </a>
       </div>
     </section>
     <section v-if="activeIndex==2">
@@ -87,12 +91,16 @@
 <script>
   import marketService from '../../service/bolosev'
   import './Market.scss'
+  import InitialBolo from '../common/InitialBolo'
+  import initialBolo from '../../assets/icon/initialBolo.png'
 
   const cityOptions = ['个人认证', '团队认证', '联合认证'];
   export default {
     name: 'market',
+    components: {InitialBolo},
     data() {
       return {
+        initialBolo,
         activeIndex: 0,
         types:['hot','new','famous','all'],
         navs: [

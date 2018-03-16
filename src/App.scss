@@ -1,7 +1,7 @@
 @import "assets/css/style";
 @import "assets/font/iconfont.css";
 @import "assets/css/sass-base";
-
+@font-face {font-family:myFont; src: url("./assets/customfont/MFShangHei_Noncommercial-Regular.woff")}
 #app {
   font-family: 微软雅黑;
   -webkit-font-smoothing: antialiased;
