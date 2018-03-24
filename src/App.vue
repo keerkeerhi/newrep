@@ -73,9 +73,14 @@
     },
     created() {
       this.cMinH = document.documentElement.clientHeight - 198 + 'px'
+
       // window.onresize = ()=>{
       //   this.cMinH = document.documentElement.clientHeight - 198 + 'px'
       // }
+    },
+    mounted(){
+      // if (web3 && web3.eth.defaultAccount)
+      //   this.$store.setWallet(web3.eth.defaultAccount)
     }
   }
 </script>

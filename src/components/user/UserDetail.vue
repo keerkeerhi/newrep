@@ -103,12 +103,12 @@ export default {
         index: 0,
         num: 10,
         t_type : 'mine'
-      },
-      timeInt: 0
+      }
     }
   },
   created(){
-    this.setWallet();
+    // this.setWallet();
+    this.params.wallet = this.$store.state.wallet;
     userService.user_info({wallet:this.params.wallet}).then(res=>{
       if (res.code==0)
         this.userInfo = res.data
@@ -120,18 +120,11 @@ export default {
         this.dataList = res.data;
 
     })
-    this.checkWallet()
+    // this.checkWallet()
   },
   methods:{
     setDefaultImg(e){
       e.target.src=defaultpp;
-    },
-    checkWallet(){
-      this.timeInt = setInterval(() => {
-        this.wallet = web3.eth.defaultAccount
-        if (!this.wallet)
-          this.$router.push('/Login')
-      }, 500)
     },
     setWallet() {
       try {
@@ -148,10 +141,6 @@ export default {
         name: 'MySDetail',
         params: { id }})
     }
-  },
-  beforeDestroy() {
-    console.log('--------------离开之前销毁定时器')
-    clearInterval(this.timeInt)
   }
 }
 </script>

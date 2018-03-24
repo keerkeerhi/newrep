@@ -169,7 +169,8 @@
           this.boloInfo = res.data
           // this.boloInfo.start_time = '2018-01-22 10:10:52';
           // this.boloInfo.end_time = '2018-3-14 15:40:22';
-          this.startTime();
+          if (this.boloInfo.start_price!=this.boloInfo.end_price)
+            this.startTime();
         }
         else
           this.$message({

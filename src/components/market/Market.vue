@@ -199,8 +199,8 @@
         marketService.query_market(this.params).then(res => {
           if ('data' in res)
           {
-            // this.dataList = res.data
-            // this.pageInfo.total = res.pl;
+            this.dataList = res.data
+            this.pageInfo.total = res.pl;
           }
         })
       },

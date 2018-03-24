@@ -59,9 +59,12 @@
       }
     },
     created() {
-      this.setWallet();
-      // this.$store.commit("setWallet",555);
-      // console.log('-------------->>',this.$store.state.wallet)
+      this.userInfo.wallet = this.$store.state.wallet;
+      console.log('----------->>')
+      userService.user_info({wallet:this.userInfo.wallet}).then(res=>{
+        if (res.code==0)
+          this.$router.push('./UserDetail')
+      })
     },
     methods: {
       setWallet() {
@@ -77,6 +80,8 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.setWallet();
+            if (!this.userInfo.wallet)
+              return;
             // delete this.userInfo.avatar
             let formdata = new FormData();
             formdata.append('wallet',this.userInfo.wallet);

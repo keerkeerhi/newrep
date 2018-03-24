@@ -55,7 +55,13 @@
     },
     methods: {
       installedM() {
-        this.$router.replace('/Login');
+        this.$router.go('/Login');
+        // this.$router.push({
+        //   path:this.$route.fullPath, // 获取当前连接，重新跳转
+        //   query:{
+        //     _time:new Date().getTime()/1000  // 时间戳，刷新当前router
+        //   }
+        // })
       },
       installMeta() {
         this.clicked = true;

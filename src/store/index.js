@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    wallet: 0
+    wallet: null
   },
   mutations: {
     setWallet(state, wallet) {

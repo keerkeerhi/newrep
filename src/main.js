@@ -15,6 +15,10 @@ Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.use(ElementUI)
 
+// 初始化钱包
+if (web3 && web3.eth.defaultAccount)
+  store.commit("setWallet",web3.eth.defaultAccount)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
