@@ -14,7 +14,21 @@
       </section>
       <div>
         <div class="glo addShadow" @click="toDetail(it.id)" v-for="(it,index) in dataList" :key="index">
-          <img class="signatureimg" :src="it.cover" />
+          <div class="signatureimg" style="position: relative;">
+            <!--<img :src="it.cover" />-->
+            <section class="boloContent">
+              <header>
+                <!--{{it.nickname}}-->
+                <span>{{it.nickname}}</span>
+                <span>登录菠萝</span>
+              </header>
+              <section>
+                {{it.c_time}}
+              </section>
+            </section>
+            <initial-bolo class="boloFont boloImg" :img="initialBolo" width="145" height="145"
+                          :data="it" />
+          </div>
         </div>
       </div>
     </section>
@@ -32,11 +46,15 @@
 <script>
 import marketService from '../../service/bolosev'
 import {isArray} from "../common/Util"
+import InitialBolo from '../common/InitialBolo'
+import initialBolo from '../../assets/icon/initialBolo.png'
 
 export default {
   name: 'home',
+  components: {InitialBolo},
   data () {
     return {
+      initialBolo,
       dataList: []
     }
   },
@@ -63,7 +81,7 @@ export default {
 
 <style lang="scss" scoped>
   @import '../../assets/css/sass-base';
-
+  @import "../../assets/css/basestyle";
   .hhomeTem{
     display: flex;
     display: -webkit-flex;
@@ -71,12 +89,14 @@ export default {
     justify-content: center;
     align-items: center;
   }
+
   .entrance{
     width: 100%;
     display: flex;
     display: -webkit-flex;
     flex-direction: row;
   }
+
   .entrance>section:first-child{
     flex: 1;
     margin-left: 3.2rem;
@@ -100,9 +120,6 @@ export default {
   .entrance>div:nth-child(2)>div:hover{
     /*border: 1px solid rgba(255,224,0,.8);*/
     box-shadow: 0 2px 12px 0 $base_black;
-  }
-  .signatureimg{
-    max-width: 100%;
   }
   .abstract{
     margin-top: 53px;
@@ -143,6 +160,48 @@ export default {
     border-radius: 1px;
     margin-top: 38px;
     font-size: 22px;
+  }
+  .signatureimg{
+    height: 100%;
+    background: $base_yellow;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    >.boloContent{
+      width: 175px;
+      height: 60px;
+      >header{
+        @extend .boloFont;
+        font-weight: 500;
+        >span:first-child{
+          font-size: 25px;
+          margin-right: 10px;
+        }
+        >span:nth-child(2){
+          font-size: 18px;
+        }
+      }
+      >section{
+        font-size: 12px;
+        height: 16px;
+        line-height: 16px;
+        margin-top: 30px;
+        text-align: center;
+        color: $base_yellow;
+        background: $base_black;
+      }
+    }
+    >.boloImg{
+      transform: scale(0.8,0.8);
+      position: absolute;
+      background: $base_yellow;
+      border-radius: 50%;
+      width: 90px;
+      height: 90px;
+      bottom: 0px;
+      right: 0px;
+    }
   }
   .description{
     height: 300px;

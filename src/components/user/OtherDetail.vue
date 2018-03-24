@@ -3,7 +3,7 @@
     <section class="invateFriend">
       <section class="personInfo">
         <div class="circleDiv">
-          <img :src="'data:image/png;base64,'+userInfo.avatar"/>
+          <img :src="userInfo.avatar" @error="setDefaultImg"/>
         </div>
         <div class="infoDetail">
           <div>
@@ -37,8 +37,20 @@
           <div @click="toDetail(index)" style="display: inline-block;">
             <el-card class="box-card cardCls">
               <section class="cardBody">
-                <div>
-                  <img style="width: 100%;" :src="it.cover" />
+                <div class="signatureimg" style="position: relative;">
+                  <!--<img :src="it.cover" />-->
+                  <section class="boloContent">
+                    <header>
+                      <!--{{it.nickname}}-->
+                      <span>{{it.nickname}}</span>
+                      <span>登录菠萝</span>
+                    </header>
+                    <section>
+                      {{it.c_time}}
+                    </section>
+                  </section>
+                  <initial-bolo class="boloFont boloImg" :img="initialBolo" width="145" height="145"
+                                :data="it" />
                 </div>
                 <div class="ownerCls">
                   <!--<span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>-->
@@ -59,11 +71,17 @@
   import userService from '../../service/userev'
   import boloService from '../../service/bolosev'
   import {isArray} from "../common/Util"
+  import InitialBolo from '../common/InitialBolo'
+  import initialBolo from '../../assets/icon/initialBolo.png'
+  import defaultpp from '../../assets/icon/defaultpp.jpg'
 
   export default {
     name: 'OtherDetail',
+    components: {InitialBolo},
     data () {
       return {
+        defaultpp,
+        initialBolo,
         dataList:[],
         userInfo: {
           nickname: '',
@@ -98,6 +116,9 @@
       this.getBolo()
     },
     methods:{
+      setDefaultImg(e){
+        e.target.src=defaultpp;
+      },
       toDetail (id) {
         console.log('------->>click',id)
         this.$router.push({
@@ -225,11 +246,47 @@
       height: 240px;
       display: flex;
       flex-direction: column;
-      >:nth-child(1) {
+      >.signatureimg {
         flex: 1;
-        >img{
-          height: 100%;
-          width: 100%;
+        height: 100%;
+        background: $base_yellow;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        >.boloContent{
+          width: 175px;
+          height: 60px;
+          >header{
+            @extend .boloFont;
+            font-weight: 500;
+            >span:first-child{
+              font-size: 25px;
+              margin-right: 10px;
+            }
+            >span:nth-child(2){
+              font-size: 18px;
+            }
+          }
+          >section{
+            font-size: 12px;
+            height: 16px;
+            line-height: 16px;
+            margin-top: 30px;
+            text-align: center;
+            color: $base_yellow;
+            background: $base_black;
+          }
+        }
+        >.boloImg{
+          transform: scale(0.8,0.8);
+          position: absolute;
+          background: $base_yellow;
+          border-radius: 50%;
+          width: 90px;
+          height: 90px;
+          bottom: 0px;
+          right: 0px;
         }
       }
       > .ownerCls {

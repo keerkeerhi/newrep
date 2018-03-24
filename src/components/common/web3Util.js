@@ -2,6 +2,7 @@
 export const getBC = function (abi, address) {
   return web3.eth.contract(abi).at(address);
 }
+
 /*
 * 购买菠萝章
 * bc       主合同对象:BOLOZERO_sale或者BOLOX_sale

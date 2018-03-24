@@ -36,7 +36,7 @@
           <ul class="identiCls">
             <li @click="toOther(boloInfo.wallet)" v-for="it in identification">
               <div class="circleDiv pimg">
-                <img :src="'data:image/png;base64,'+boloInfo.avatar" />
+                <img :src="boloInfo.avatar" @error="setDefaultImg" />
               </div>
               <div class="famousPerson">
                 <div>{{boloInfo.nickname}}</div>
@@ -52,11 +52,13 @@
 
 <script>
   import boloService from '../../service/bolosev'
+  import defaultpp from '../../assets/icon/defaultpp.jpg'
 
   export default {
     name: 'signatrueDetail',
     data() {
       return {
+        defaultpp,
         stype: 0,
         identification: [{}],
         pid: '',
@@ -96,6 +98,9 @@
       })
     },
     methods: {
+      setDefaultImg(e){
+        e.target.src=defaultpp;
+      },
       goPrev(){
         window.history.go(-1);
       },

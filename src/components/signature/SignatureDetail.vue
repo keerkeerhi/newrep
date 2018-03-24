@@ -24,8 +24,8 @@
             说明：<span>{{boloInfo.info}}</span>
           </section>
         </div>
-        <hr v-show="map.beginMoney==map.endMoney" style="margin: 0 20px;"/>
-        <section v-show="map.beginMoney==map.endMoney">
+        <hr v-show="this.boloInfo.start_price==this.boloInfo.end_price" style="margin: 0 20px;"/>
+        <section v-show="this.boloInfo.start_price==this.boloInfo.end_price">
           <div class="cerInfo buySec">
             <span>价格：<span class="priceCls">{{boloInfo.price}} ETH</span></span>
             <el-button class="payBtn" type="primary">支付并拥有</el-button>
@@ -33,7 +33,7 @@
         </section>
       </div>
     </section>
-    <section v-show="map.beginMoney!=map.endMoney" class="cardSec ">
+    <section v-show="this.boloInfo.start_price!=this.boloInfo.end_price" class="cardSec ">
       <section class="cardBord auction">
         <header>
             <span>
@@ -60,19 +60,19 @@
             <g>
               <title>当前价格{{boloInfo.price}}ETH</title>
               <!-- 左y轴 -->
-              <line v-if="map.beginMoney>map.endMoney" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_8"
+              <line v-if="this.boloInfo.start_price>this.boloInfo.end_price" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_8"
                     y2="276" x2="13.5" y1="14" x1="13.5" stroke-width="1.5" stroke="#000" fill="none"/>
               <!-- x轴 -->
               <line stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_9" y2="276" x2="1186.5" y1="276"
                     x1="13.5" stroke-width="1.5" stroke="#000" fill="none"/>
               <!-- 右y轴 -->
-              <line v-if="map.beginMoney<map.endMoney" stroke-linecap="undefined" stroke-linejoin="undefined"
-                    id="svg_10" y2="14" x2="748.5" y1="276" x1="1186.5" stroke-width="1.5" stroke="#000" fill="none"/>
+              <line v-if="this.boloInfo.start_price<this.boloInfo.end_price" stroke-linecap="undefined" stroke-linejoin="undefined"
+                    id="svg_10" y2="14" x2="1186.5" y1="276" x1="1186.5" stroke-width="1.5" stroke="#000" fill="none"/>
               <!-- 从左到右下降 -->
-              <line v-if="map.beginMoney>map.endMoney" stroke-linecap="undefined" stroke-linejoin="undefined"
+              <line v-if="this.boloInfo.start_price>this.boloInfo.end_price" stroke-linecap="undefined" stroke-linejoin="undefined"
                     id="svg_14" y2="276" x2="1186.5" y1="14" x1="13.5" stroke-width="1.5" stroke="#000" fill="none"/>
               <!-- 从左到右上升 -->
-              <line v-if="map.beginMoney<map.endMoney" stroke-linecap="undefined" stroke-linejoin="undefined"
+              <line v-if="this.boloInfo.start_price<this.boloInfo.end_price" stroke-linecap="undefined" stroke-linejoin="undefined"
                     id="svg_15" y2="13.5" x2="1186.5" y1="276" x1="12.5" stroke-width="1.5" stroke="#000" fill="none"/>
               <!-- 圆圈 -->
               <ellipse ry="7.5" rx="6" id="svg_18" :cy="map.cy" :cx="map.cx" stroke-opacity="null" stroke-width="1.5"
@@ -99,7 +99,7 @@
           <ul class="identiCls">
             <li @click="toOther(boloInfo.wallet)" v-for="it in identification">
               <div class="circleDiv pimg">
-                <img :src="'data:image/png;base64,'+boloInfo.avatar"/>
+                <img :src="boloInfo.avatar" @error="setDefaultImg"/>
               </div>
               <div class="famousPerson">
                 <div>{{boloInfo.nickname}}</div>
@@ -117,11 +117,13 @@
   import boloService from '../../service/bolosev'
   import {translatSecond, DatetoSecond} from "../common/Util"
   import {getBC, bidBolo} from "../common/web3Util"
+  import defaultpp from '../../assets/icon/defaultpp.jpg'
 
   export default {
     name: 'signatrueDetail',
     data() {
       return {
+        defaultpp,
         stype: 0,
         identification: [{}],
         map: {
@@ -180,6 +182,9 @@
       console.log('--------------菠萝详情')
     },
     methods: {
+      setDefaultImg(e){
+        e.target.src=defaultpp;
+      },
       getCurrentPrice() {
         let {start_price, start_time, end_time, end_price} = this.boloInfo;
         // if (start_price==end_price)
@@ -213,7 +218,11 @@
         // 开始交易
         bidBolo(bc, this.boloInfo.token, really_amount, this.wallet, (transCode) => {
           this.transCode = transCode
-          walletService.sale_record({pid: this.pid, wallet: this.wallet, tx:this.transCode}).then(res => {
+          let formdata = new FormData();
+          formdata.append('pid',this.pid);
+          formdata.append('wallet',this.wallet);
+          formdata.append('tx',this.transCode);
+          walletService.sale_record(formdata).then(res => {
             if (res.code == 0) {
               this.$message({
                 message: '写入记录！',
@@ -234,11 +243,13 @@
         })
       },
       startTime() {
-        let st = Math.floor(Date.now() / 1000)
+        let st = Math.floor(Date.parse(this.boloInfo.start_time) / 1000)
+        let ct = Math.floor(Date.now() / 1000)
         let et = Math.floor(Date.parse(this.boloInfo.end_time) / 1000)
         let total = et - st;
-        this.number = total;
+        this.number = et-ct;
         this.interV = setInterval(() => {
+          console.log('--------->>',total,this.number)
           this.number--;
           if (this.number >= 0) {
             this.map.xPercent = (total - this.number) / total
@@ -252,7 +263,8 @@
       },
       calcPercent() {
         let mp = this.map;
-        if (mp.beginMoney < mp.endMoney) {
+        // console.log('======>',mp.xPercent)
+        if (this.boloInfo.start_price < this.boloInfo.end_price) {
           mp.cy = 276 - 262 * mp.xPercent;
           mp.cx = 13.5 + 1173 * mp.xPercent;
         }

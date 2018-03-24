@@ -26,28 +26,35 @@
         <!--</el-select>-->
       <!--</div>-->
     </section>
-    <section v-if="activeIndex!=2" class="marketcontent">
+    <section v-if="activeIndex!=2&&dataList.length>0" class="marketcontent">
       <div v-for="(it,index) in dataList"
            :key="index">
         <!--@click="toDetail(it.id)"-->
-        <a :href="'/#/SignatureDetail/'+it.id"  style="display: inline-block;text-decoration: none;">
-          <el-card class="box-card cardCls">
+        <router-link tag="a" :to="{ name: 'SignatureDetail', params: { id: it.id }}"  style="display: inline-block;text-decoration: none;">
             <section class="cardBody">
               <div style="position: relative;">
                 <!--<img :src="it.cover" />-->
-                <span class="boloFont">卞相壹登录菠萝</span>
-                <initial-bolo class="boloImg" :img="initialBolo" width="145" height="145"
-                              :data="{dateTime:'2018.03.10'}" />
+                <section class="boloContent">
+                  <header>
+                    <span>{{it.nickname}}</span>
+                    <span>登录菠萝</span>
+                  </header>
+                  <section>
+                    {{it.c_time}}
+                  </section>
+                </section>
+                <initial-bolo class="boloFont boloImg" :img="initialBolo" width="145" height="145"
+                              :data="it" />
               </div>
               <div class="ownerCls">
                 <!--<span v-if="it.people.length>1" v-for="(p,inx) in it.people">{{p.name}}</span>-->
                 <div class="signer">
                   <div style="width: 60px;" class="circleDiv">
-                    <img :src="'data:image/png;base64,'+it.avatar" />
+                    <img :src="it.avatar" @error="setDefaultImg" />
                   </div>
                   <div>
                     <div>{{it.nickname}}</div>
-                    <div v-if="it.mark">{{it.mark | cutWord(14) }}</div>
+                    <div v-if="it.mark">{{it.mark | cutWord(100) }}</div>
                   </div>
                   <div></div>
                   <div class="priceDiv">
@@ -56,10 +63,12 @@
                 </div>
               </div>
             </section>
-          </el-card>
-        </a>
+        </router-link>
       </div>
     </section>
+    <div class="noResult" v-if="dataList.length==0">
+      <img src="../../assets/icon/noresult.png" />
+    </div>
     <section v-if="activeIndex==2">
       <div class="famousCls" v-for="(it,index) in dataList2" :key="index">
         <section>
@@ -73,7 +82,7 @@
         </section>
         <ul>
           <li @click="toDetail(it.id)" v-for="(i,inx) in it.sList" :key="inx">
-            <img :src="'data:image/png;base64,'+it.avatar" />
+            <img :src="it.avatar" @error="setDefaultImg" />
           </li>
         </ul>
       </div>
@@ -93,13 +102,14 @@
   import './Market.scss'
   import InitialBolo from '../common/InitialBolo'
   import initialBolo from '../../assets/icon/initialBolo.png'
-
+  import defaultpp from '../../assets/icon/defaultpp.jpg'
   const cityOptions = ['个人认证', '团队认证', '联合认证'];
   export default {
     name: 'market',
     components: {InitialBolo},
     data() {
       return {
+        defaultpp,
         initialBolo,
         activeIndex: 0,
         types:['hot','new','famous','all'],
@@ -145,11 +155,11 @@
         params:{
           t_type:'hot',
           index: 0,
-          num: 10,
+          num: 8,
           t_filter: ''
         },
         pageInfo: {
-          pageSize: 10,
+          pageSize: 8,
           total: 0,
           index: 1
         }
@@ -168,6 +178,9 @@
       }
     },
     methods: {
+      setDefaultImg(e){
+        e.target.src=defaultpp;
+      },
       pageChange(currentPage){
         this.params.index = currentPage-1;
         this.getBoloList();
@@ -186,8 +199,8 @@
         marketService.query_market(this.params).then(res => {
           if ('data' in res)
           {
-            this.dataList = res.data
-            this.pageInfo.total = res.pl;
+            // this.dataList = res.data
+            // this.pageInfo.total = res.pl;
           }
         })
       },
